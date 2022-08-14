@@ -29,7 +29,9 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
         'bmi': data.data.b,
         'hn': data.hn,
         'fullname': data.fullname,
-        'd_update': moment().format('YYYY-MM-DD HH:mm:ss')
+        'd_update': moment().format('YYYY-MM-DD HH:mm:ss'),
+        'note1':data.data.dep,
+        'note2':data.data.staff
     };
     r = await knex('smart_gate_bmi').insert(raw)
     res.json(raw)
