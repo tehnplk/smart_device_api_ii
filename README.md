@@ -2,7 +2,7 @@
 <ul>
 <li> Install Nodejs</li>
 <li> Clone this repository</li>
-<li> edit file con_db.js to connect his</li>
+<li> edit file <b>con_db.js</b> to connect his</li>
 <li> run command in project root directory. </li>
 <li> run command  "npm install"
 <li> run command  "npm install -g pm2"</li>
