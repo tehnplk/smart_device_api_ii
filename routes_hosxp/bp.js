@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var knex = require('../con_db')
+var knex = require('../con_db');
+var moment = require('moment')
 
 
 router.post('/post_data_bp', async function (req, res, next) {
@@ -18,25 +19,27 @@ router.post('/post_data_bp', async function (req, res, next) {
 });
 
 router.post('/post_data_bp_list', async function (req, res, next) {
-
-    let vn = req.body.vn;
-    let bps = req.body.bps;
-    let bpd = req.body.bpd;
-    let pulse = req.body.pulse;
-    let depcode = req.body.depcode;
-    let staff = req.body.staff;
+    data = req.body
+    console.log(data)
+    let vn = data.vn;
+    let bps = data.data.bps;
+    let bpd = data.data.bpd;
+    let pulse = data.data.pulse;
+    let dep = data.data.dep;
+    let staff = data.data.staff;
     let sql = ` replace into opdscreen_bp 
   set opdscreen_bp_id = get_serialnumber('opdscreen_bp_id') 
-  ,vn =? ,bps=? ,bpd=? ,pulse=? ,depcode=? ,staff=? 
+  ,vn ='${vn}' ,bps='${bps}' ,bpd='${bpd}' ,pulse='${pulse}' ,depcode='${dep}' ,staff='${staff}' 
   ,screen_date = CURRENT_DATE,screen_time = CURRENT_TIME ,rr=0,o2sat=0,temperature=0 `;
+    console.log(sql)
     try {
-        let data = await knex.raw(sql, [vn, bps, bpd, pulse, depcode, staff]);
+        let data = await knex.raw(sql);
         res.json({
             'opdscreen_bp': 'added'
         });
     } catch (error) {
         res.json({
-            'opdscreen_bp': 'error'
+            'opdscreen_bp': error
         });
     }
 
@@ -46,7 +49,21 @@ router.post('/post_data_bp_list', async function (req, res, next) {
 router.post('/post_data_bp_log', async function (req, res, next) {
     data = req.body
     console.log(data)
-    res.json(data)
+    raw = {
+        'vn': data.vn,
+        'cid': data.cid,
+        'hn': data.hn,
+        'fullname': data.fullname,
+        'bps': data.data.bps,
+        'bpd': data.data.bpd,
+        'pulse': data.data.pulse,
+        'note1': data.data.dep,
+        'note2': data.data.staff,
+        'note3': data.data.machine,
+        'd_update': moment().format('YYYY-MM-DD HH:mm:ss')
+    };
+    r = await knex('smart_gate_bp').insert(raw)
+    res.json(raw)
 
 });
 

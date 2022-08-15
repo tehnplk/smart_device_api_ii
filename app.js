@@ -21,6 +21,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes_hosxp/index'));
 app.use('/patient', require('./routes_hosxp/patient'))
 app.use('/bmi', require('./routes_hosxp/bmi'))
+app.use('/tp', require('./routes_hosxp/tp'))
+app.use('/bp', require('./routes_hosxp/bp'))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
