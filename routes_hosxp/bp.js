@@ -53,14 +53,14 @@ router.post('/post_data_bp_log', async function (req, res, next) {
         'vn': data.vn,
         'cid': data.cid,
         'hn': data.hn,
-        'fullname': data.fullname,
-        'bps': data.data.bps,
-        'bpd': data.data.bpd,
-        'pulse': data.data.pulse,
+        'fullname': data.fullname,        
         'note1': data.data.dep,
         'note2': data.data.staff,
         'note3': data.data.machine,
-        'd_update': moment().format('YYYY-MM-DD HH:mm:ss')
+        'd_update': moment().format('YYYY-MM-DD HH:mm:ss'),
+        'bps': data.data.bps,
+        'bpd': data.data.bpd,
+        'pulse': data.data.pulse
     };
     r = await knex('smart_gate_bp').insert(raw)
     res.json(raw)

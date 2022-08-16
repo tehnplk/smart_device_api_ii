@@ -4,34 +4,35 @@ var knex = require('../con_db')
 var moment = require('moment')
 
 
-router.post('/post_data_tp', async function (req, res, next) {
+router.post('/post_data_sp', async function (req, res, next) {
     data = req.body
     console.log(data)
     r = await knex('opdscreen')
         .where('vn', '=', data.vn)
         .update({
-            temperature: data.data.tp
+            spo2: data.data.sp
         })
     res.json(data)
 
 
 });
 
-router.post('/post_data_tp_log', async function (req, res, next) {
+router.post('/post_data_sp_log', async function (req, res, next) {
     data = req.body
     console.log(data)
     raw = {
         'vn': data.vn,
-        'cid': data.cid,       
+        'cid': data.cid,        
         'hn': data.hn,
         'fullname': data.fullname,
         'd_update': moment().format('YYYY-MM-DD HH:mm:ss'),
         'note1': data.data.dep,
         'note2': data.data.staff,
         'note3': data.data.machine,
-        'tp': data.data.tp,
+        'sp': data.data.sp,
+        'pulse':data.data.pulse,
     };
-    r = await knex('smart_gate_tp').insert(raw)
+    r = await knex('smart_gate_sp').insert(raw)
     res.json(raw)
 });
 
