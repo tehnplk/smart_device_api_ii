@@ -6,6 +6,7 @@ data_none = {
   'hn': NaN,
   'cid': NaN,
   'fullname':NaN,
+  'sex':NaN,
   'vn': NaN
 }
 
