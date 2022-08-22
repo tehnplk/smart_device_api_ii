@@ -10,9 +10,9 @@ router.post('/post_data_bmi', async function (req, res, next) {
     r = await knex('opdscreen')
         .where('vn', '=', data.vn)
         .update({
-            bw: data.data.w,
-            height: data.data.h,
-            bmi: data.data.b
+            bw: data.data.bw,
+            height: data.data.bh,
+            bmi: data.data.bmi
         })
     res.json(data)
 
@@ -30,9 +30,9 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
         'note1': data.data.dep,
         'note2': data.data.staff,
         'note3': data.data.machine,
-        'bw': data.data.w,
-        'bh': data.data.h,
-        'bmi': data.data.b
+        'bw': data.data.bw,
+        'bh': data.data.bh,
+        'bmi': data.data.bmi
     };
     r = await knex('smart_gate_bmi').insert(raw)
     res.json(raw)
