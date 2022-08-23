@@ -32,7 +32,8 @@ router.post('/post_data_bp_list', async function (req, res, next) {
         console.log('vn is null')
         res.json({
             'opdscreen_bp vn is null': 'null'
-        })
+        });
+        return false;
     }
 
     let sql = ` replace into opdscreen_bp 
