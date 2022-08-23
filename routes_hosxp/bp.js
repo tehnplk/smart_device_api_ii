@@ -39,7 +39,7 @@ router.post('/post_data_bp_list', async function (req, res, next) {
   set opdscreen_bp_id = get_serialnumber('opdscreen_bp_id') 
   ,vn ='${vn}' ,bps='${bps}' ,bpd='${bpd}' ,pulse='${pulse}' ,depcode='${dep}' ,staff='${staff}' 
   ,screen_date = CURRENT_DATE,screen_time = CURRENT_TIME ,rr=0,o2sat=0,temperature=0 `;
-    console.log(sql)
+    //console.log(sql)
     try {
         let data = await knex.raw(sql);
         res.json({
