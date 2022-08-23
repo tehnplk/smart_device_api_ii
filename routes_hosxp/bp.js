@@ -27,6 +27,14 @@ router.post('/post_data_bp_list', async function (req, res, next) {
     let pulse = data.data.pulse;
     let dep = data.data.dep;
     let staff = data.data.staff;
+
+    if (data.vn == null) {
+        console.log('vn is null')
+        res.json({
+            'opdscreen_bp vn is null': 'null'
+        })
+    }
+
     let sql = ` replace into opdscreen_bp 
   set opdscreen_bp_id = get_serialnumber('opdscreen_bp_id') 
   ,vn ='${vn}' ,bps='${bps}' ,bpd='${bpd}' ,pulse='${pulse}' ,depcode='${dep}' ,staff='${staff}' 
@@ -53,7 +61,7 @@ router.post('/post_data_bp_log', async function (req, res, next) {
         'vn': data.vn,
         'cid': data.cid,
         'hn': data.hn,
-        'fullname': data.fullname,        
+        'fullname': data.fullname,
         'note1': data.data.dep,
         'note2': data.data.staff,
         'note3': data.data.machine,
