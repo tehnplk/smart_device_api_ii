@@ -6,5 +6,6 @@
 <li> run command in project root directory. </li>
 <li> run command  "npm install"
 <li> run command  "npm install -g pm2"</li>
+<li> run command  "npm install -g nodemon"</li>
 <li> run command  "pm2 start ./bin/www --name smart-device-api-ii -i 4"
 </ul>
