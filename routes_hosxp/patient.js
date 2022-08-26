@@ -74,10 +74,14 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
 });
 
 router.get('/get_today_visit_by_cid/:cid',function(req,res,next){
+  cid = req.params.cid
+  sql = `SELECT t.vstdate , t.vsttime, t.vn from  ovst t 
+  INNER JOIN patient p on p.hn = t.hn
+  WHERE t.vstdate = CURRENT_DATE and p.cid = '${cid}' ORDER BY t.vn DESC`
 
   data_not_found = {
-    'visit_date':'2022-01-01',
-    'visit_time':'12:00:00',
+    'visit_date':'1980-04-18',
+    'visit_time':'11:30:00',
     'visit_number':'0'
 
   }
@@ -86,11 +90,17 @@ router.get('/get_today_visit_by_cid/:cid',function(req,res,next){
 })
 
 router.get('/get_today_visit_by_hn/:hn',function(req,res,next){
-
-  data_not_found = {
-    'visit_date':'2022-01-01',
-    'visit_time':'12:00:00',
+  hn = req.params.hn
+  sql = `SELECT t.vstdate , t.vsttime, t.vn from  ovst t WHERE t.vstdate = CURRENT_DATE and t.hn = '${hn}' ORDER BY t.vn DESC`
+  r = await knex.raw(sql)
+  data_none = {
+    'visit_date':'1980-04-18',
+    'visit_time':'11:30:00',
     'visit_number':'0'
+  }
+  if (!r[0][0]){
+    res.json(data_none)
+    return false
   }
   res.json(data_not_found)
 
