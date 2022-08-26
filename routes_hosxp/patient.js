@@ -76,9 +76,9 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
 router.get('/get_today_visit_by_cid/:cid',function(req,res,next){
 
   data = {
-    'vstdate':'2022-01-01',
-    'vsttime':'12:00:00',
-    'vn':'000'
+    'visit_date':'2022-01-01',
+    'visit_time':'12:00:00',
+    'visit_number':'000'
 
   }
   res.json(data)
@@ -88,9 +88,9 @@ router.get('/get_today_visit_by_cid/:cid',function(req,res,next){
 router.get('/get_today_visit_by_hn/:hn',function(req,res,next){
 
   data = {
-    'vstdate':'2022-01-01',
-    'vsttime':'12:00:00',
-    'vn':'000'
+    'visit_date':'2022-01-01',
+    'visit_time':'12:00:00',
+    'visit_number':'000'
 
   }
   res.json(data)
