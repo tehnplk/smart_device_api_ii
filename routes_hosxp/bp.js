@@ -10,6 +10,7 @@ router.post('/post_data_bp', async function (req, res, next) {
     r = await knex('opdscreen')
         .where('vn', '=', data.vn)
         .update({
+            temperature:data.data.tp,
             bps: data.data.bps,
             bpd: data.data.bpd,
             pulse: data.data.pulse
@@ -22,6 +23,7 @@ router.post('/post_data_bp_list', async function (req, res, next) {
     data = req.body
     console.log(data)
     let vn = data.vn;
+    let tp = data.data.tp
     let bps = data.data.bps;
     let bpd = data.data.bpd;
     let pulse = data.data.pulse;
@@ -39,7 +41,7 @@ router.post('/post_data_bp_list', async function (req, res, next) {
     let sql = ` replace into opdscreen_bp 
   set opdscreen_bp_id = get_serialnumber('opdscreen_bp_id') 
   ,vn ='${vn}' ,bps='${bps}' ,bpd='${bpd}' ,pulse='${pulse}' ,depcode='${dep}' ,staff='${staff}' 
-  ,screen_date = CURRENT_DATE,screen_time = CURRENT_TIME ,rr=0,o2sat=0,temperature=0 `;
+  ,screen_date = CURRENT_DATE,screen_time = CURRENT_TIME ,rr=0,o2sat=0,temperature= '${tp}' `;
     //console.log(sql)
     try {
         let data = await knex.raw(sql);
@@ -67,6 +69,7 @@ router.post('/post_data_bp_log', async function (req, res, next) {
         'note2': data.data.staff,
         'note3': data.data.machine,
         'd_update': moment().format('YYYY-MM-DD HH:mm:ss'),
+        'tp': data.data.tp,
         'bps': data.data.bps,
         'bpd': data.data.bpd,
         'pulse': data.data.pulse

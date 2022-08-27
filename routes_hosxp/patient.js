@@ -5,8 +5,8 @@ var knex = require('../con_db')
 data_none = {
   'hn': NaN,
   'cid': NaN,
-  'fullname':NaN,
-  'sex':NaN,
+  'fullname': NaN,
+  'sex': NaN,
   'vn': NaN
 }
 
@@ -16,7 +16,7 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
   ,(select vn from vn_stat where vstdate = CURRENT_DATE  and cid = '${cid}' order by vn DESC limit 1) vn 
   from patient where cid = '${cid}' limit 1`
   r = await knex.raw(sql)
-  if (!r[0][0]){
+  if (!r[0][0]) {
     res.json(data_none)
     return false
   }
@@ -25,7 +25,7 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
     'hn': r[0][0].hn,
     'cid': r[0][0].cid,
     'fullname': r[0][0].fullname,
-    'sex':r[0][0].sex,
+    'sex': r[0][0].sex,
     'vn': r[0][0].vn
   }
   res.json(data)
@@ -37,7 +37,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   ,(select vn from vn_stat where vstdate = CURRENT_DATE  and hn = '${hn}' order by vn DESC limit 1) vn 
   from patient where hn = '${hn}' limit 1`
   r = await knex.raw(sql)
-  if (!r[0][0]){
+  if (!r[0][0]) {
     res.json(data_none)
     return false
   }
@@ -46,7 +46,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     'hn': r[0][0].hn,
     'cid': r[0][0].cid,
     'fullname': r[0][0].fullname,
-    'sex':r[0][0].sex,
+    'sex': r[0][0].sex,
     'vn': r[0][0].vn
   }
   res.json(data)
@@ -58,7 +58,7 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
   from ovst t INNER JOIN patient p ON t.hn = p.hn
   WHERE t.vn = '${vn}'`
   r = await knex.raw(sql)
-  if (!r[0][0]){
+  if (!r[0][0]) {
     res.json(data_none)
     return false
   }
@@ -67,45 +67,57 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
     'hn': r[0][0].hn,
     'cid': r[0][0].cid,
     'fullname': r[0][0].fullname,
-    'sex':r[0][0].sex,
+    'sex': r[0][0].sex,
     'vn': r[0][0].vn
   }
   res.json(data)
 });
 
-router.get('/get_today_visit_by_cid/:cid',function(req,res,next){
+router.get('/get_today_visit_by_cid/:cid', async function (req, res, next) {
   cid = req.params.cid
-  sql = `SELECT t.vstdate , t.vsttime, t.vn from  ovst t 
+  sql = `SELECT t.vstdate visit_date, t.vsttime visit_time, t.vn visit_number from  ovst t 
   INNER JOIN patient p on p.hn = t.hn
-  WHERE t.vstdate = CURRENT_DATE and p.cid = '${cid}' ORDER BY t.vn DESC`
-
-  data_not_found = {
-    'visit_number':'0',
-    'visit_date':'1980-04-18',
-    'visit_time':'11:30:00',
-    
-
-  }
-  res.json(data_not_found)
-
-})
-
-router.get('/get_today_visit_by_hn/:hn',function(req,res,next){
-  hn = req.params.hn
-  sql = `SELECT t.vstdate , t.vsttime, t.vn from  ovst t WHERE t.vstdate = CURRENT_DATE and t.hn = '${hn}' ORDER BY t.vn DESC`
+  WHERE t.vstdate = CURRENT_DATE and p.cid = '${cid}' ORDER BY t.vn DESC limit 1`
   r = await knex.raw(sql)
-  data_none = {
-    'visit_number':'0',
-    'visit_date':'1980-04-18',
-    'visit_time':'11:30:00'
-    
-  }
-  if (!r[0][0]){
+  console.dir(r[0])
+  if (!r[0][0]) {
+    data_none = {
+      'visit_number': NaN,
+      'visit_date': NaN,
+      'visit_time': NaN
+    }
     res.json(data_none)
     return false
   }
-  res.json(data_not_found)
+  data = {
+    'visit_number': r[0][0].visit_number,
+    'visit_date': r[0][0].visit_date,
+    'visit_time': r[0][0].visit_time
+  }
+  res.json(data) 
 
+})
+
+router.get('/get_today_visit_by_hn/:hn', async function (req, res, next) {
+  hn = req.params.hn
+  sql = `SELECT t.vstdate , t.vsttime, t.vn from  ovst t WHERE t.vstdate = CURRENT_DATE and t.hn = '${hn}' ORDER BY t.vn DESC limit 1`
+  r = await knex.raw(sql)
+
+  if (!r[0][0]) {
+    data_none = {
+      'visit_number': NaN,
+      'visit_date': NaN,
+      'visit_time': NaN
+    }
+    res.json(data_none)
+    return false
+  }
+  data = {
+    'visit_number': r[0][0].visit_number,
+    'visit_date': r[0][0].visit_date,
+    'visit_time': r[0][0].visit_time
+  }
+  res.json(data)
 })
 
 module.exports = router;
