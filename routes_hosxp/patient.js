@@ -9,6 +9,20 @@ data_none = {
   'sex': NaN,
   'vn': NaN
 }
+router.get('/test',async function(req, res, next){
+
+  sql = "select vn , hn , vstdate,vsttime from ovst order by vn DESC limit 1"
+  r = await knex.raw(sql)
+  data = {
+    'test':'SUCCESS',
+    'hn': r[0][0].hn,
+    'vn': r[0][0].vn,
+    'vstdate':r[0][0].vstdate,
+    'vsttime':r[0][0].vsttime
+  }
+  res.json(data)
+
+})
 
 router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
   cid = req.params.cid
