@@ -12,7 +12,7 @@ router.post('/post_data_sp', async function (req, res, next) {
         .update({
             spo2: data.data.sp
         })
-    res.json(data)
+    res.json(r)
 
 
 });
@@ -33,7 +33,7 @@ router.post('/post_data_sp_log', async function (req, res, next) {
         'pulse':data.data.pulse,
     };
     r = await knex('smart_gate_sp').insert(raw)
-    res.json(raw)
+    res.json(r)
 });
 
 

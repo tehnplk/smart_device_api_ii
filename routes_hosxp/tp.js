@@ -32,7 +32,7 @@ router.post('/post_data_tp_log', async function (req, res, next) {
         'tp': data.data.tp,
     };
     r = await knex('smart_gate_tp').insert(raw)
-    res.json(raw)
+    res.json(r)
 });
 
 
