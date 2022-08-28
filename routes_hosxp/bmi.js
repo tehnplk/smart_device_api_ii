@@ -14,7 +14,10 @@ router.post('/post_data_bmi', async function (req, res, next) {
             height: data.data.bh,
             bmi: data.data.bmi
         })
-    res.json(data)
+
+        console.log(r)
+
+        res.json(r)
 
 });
 
@@ -23,7 +26,7 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
     console.log(data)
     raw = {
         'vn': data.vn,
-        'cid': data.cid,       
+        'cid': data.cid,
         'hn': data.hn,
         'fullname': data.fullname,
         'd_update': moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -35,7 +38,7 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
         'bmi': data.data.bmi
     };
     r = await knex('smart_gate_bmi').insert(raw)
-    res.json(raw)
+    res.json(r)
 
 });
 
