@@ -9,3 +9,6 @@
 <li> run command  "npm install -g nodemon"</li>
 <li> run command  "pm2 start ./bin/www --name smart-device-api-ii -i 4"
 </ul>
+<h1>AUTO on PI</h2>
+<li>sudo nano /etc/xdg/lxsession/LXDE-pi/autostart</li>
+<li>@pm2 start /home/pi/smart_device_api_ii/bin/www -n api -i 2</li>
