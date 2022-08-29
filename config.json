@@ -1,0 +1,9 @@
+{
+    "con": {
+        "host": "localhost",
+        "port":3306,
+        "user":"root",
+        "pass":"112233",
+        "db":"hosxp_pcu"
+    }
+}
