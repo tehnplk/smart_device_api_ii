@@ -13,3 +13,5 @@
 <li>sudo apt-get install nodejs [then sudo node -v , sudo npm -v]</li>
 <li>sudo nano /etc/xdg/lxsession/LXDE-pi/autostart</li>
 <li>@pm2 start /home/pi/smart_device_api_ii/bin/www -n api -i 2</li>
+<h1>TEST</h1>
+http://localhost:3000/patient/test

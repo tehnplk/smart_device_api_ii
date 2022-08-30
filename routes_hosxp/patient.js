@@ -20,6 +20,7 @@ router.get('/test',async function(req, res, next){
     'vstdate':r[0][0].vstdate,
     'vsttime':r[0][0].vsttime
   }
+  console.log(data)
   res.json(data)
 
 })
