@@ -7,7 +7,7 @@
 <li> run command  "npm install"
 <li> run command  "npm install -g pm2"</li>
 <li> run command  "npm install -g nodemon"</li>
-<li> run command  "pm2 start ./bin/www --name smart-device-api-ii -i 4"
+<li> run command  "pm2 start ./bin/www -n smart-device-api -i 2"
 </ul>
 <h1>On Raspberry Pi</h2>
 <li>sudo apt-get install nodejs [then sudo node -v , sudo npm -v]</li>
