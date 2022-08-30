@@ -7,8 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('smart-device-api-win:server');
 var http = require('http');
-var my_port = require('../port')
-var _port = my_port.port
+var config = require('../config.json')
+var _port = config.api.port
 console.log('PORT = '+_port)
 
 /**
