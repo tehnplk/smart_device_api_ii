@@ -12,7 +12,7 @@ router.post('/post_data_tp', async function (req, res, next) {
         .update({
             temperature: data.data.tp
         })
-    res.json(data)
+    res.json(r)
 
 
 });
