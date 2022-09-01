@@ -9,6 +9,13 @@
 <li> run command  "npm install -g nodemon"</li>
 <li> run command  "pm2 start ./bin/www -n smart-device-api -i 2"
 </ul>
+<h1>AUTO BOOT</h1>
+<li>npm install --global --production windows-build-tools</li>
+<li>npm install -g pm2 pm2-windows-startup</li>
+<li>pm2-startup install</li>
+<li>pm2 start ./bin/www -n api-2</li>
+<li><a href="https://moremeng.in.th/2020/11/how-to-startup-nodejs-when-boot-windows-and-linux.html">อ้างอิง</a></li>
+
 <h1>On Raspberry Pi</h2>
 <li>sudo apt-get install nodejs [then sudo node -v , sudo npm -v]</li>
 <li>sudo nano /etc/xdg/lxsession/LXDE-pi/autostart</li>
