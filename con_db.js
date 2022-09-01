@@ -1,3 +1,4 @@
+//แก้ไขการเชื่อมต่อที่ไฟล์ config.json แทน
 config = require('./config.json')
 var knex = require("knex")({
     client: "mysql",
