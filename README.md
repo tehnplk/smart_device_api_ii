@@ -14,7 +14,7 @@
 <li>npm install -g pm2 pm2-windows-startup</li>
 <li>pm2-startup install</li>
 <li>pm2 start ./bin/www -n api-2</li>
-<li><a href="https://moremeng.in.th/2020/11/how-to-startup-nodejs-when-boot-windows-and-linux.html">อ้างอิง</a></li>
+<li><a href="https://moremeng.in.th/2020/11/how-to-startup-nodejs-when-boot-windows-and-linux.html" target="_blank">อ้างอิง</a></li>
 
 <h1>On Raspberry Pi</h2>
 <li>sudo apt-get install nodejs [then sudo node -v , sudo npm -v]</li>
