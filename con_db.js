@@ -10,7 +10,7 @@ Connection_string = {
         port: config.db.port,
         user: config.db.user,
         password: config.db.password,
-        database: config.db.db,
+        database: config.db.database,
         timezone: 'utc'
     },
     pool: {
@@ -29,7 +29,7 @@ if (config.db.client == 'pg') {
             port: config.db.port,
             user: config.db.user,
             password: config.db.password,
-            database: config.db.db
+            database: config.db.database,
         },
     }
 }

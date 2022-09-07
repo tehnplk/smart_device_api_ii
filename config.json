@@ -6,7 +6,7 @@
         "port": 3306,
         "user": "root",
         "password": "112233",
-        "db": "hosxp_pcu"
+        "database": "hosxp_pcu"
     },
     "api": {
         "port": 3000
