@@ -1,13 +1,14 @@
 //แก้ไขการเชื่อมต่อที่ไฟล์ config.json แทน
-config = require('./config.json')
-var knex = require("knex")({
+var config = require('./config.json')
+
+Connection_string = {
     client: "mysql",
     connection: {
-        host: config.con.host,
-        port: config.con.port,
-        user: config.con.user,
-        password: config.con.pass,
-        database: config.con.db,
+        host: config.db.host,
+        port: config.db.port,
+        user: config.db.user,
+        password: config.db.pass,
+        database: config.db.db,
         timezone: 'utc'
     },
     pool: {
@@ -17,5 +18,18 @@ var knex = require("knex")({
             });
         }
     }
-});
+}
+if (config.db.client == 'pg') {
+    Connection_string = {
+        client: "pg",
+        connection: {
+            host: config.db.host,
+            user: config.db.user,
+            password: config.db.pass,
+            database: config.db.db
+        },
+    }
+}
+
+var knex = require("knex")(Connection_string);
 module.exports = knex
