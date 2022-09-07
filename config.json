@@ -1,6 +1,6 @@
 {
     "db": {
-        "client_support":"mysql or pg",
+        "client_support":"mysql | pg",
         "client":"mysql" , 
         "host": "localhost",
         "port": 3306,
