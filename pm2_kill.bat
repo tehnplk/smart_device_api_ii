@@ -1,1 +1,1 @@
-pm2 kill && pm2 list && pause
+pm2 delete api-2 && pm2 list && pause

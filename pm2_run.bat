@@ -1,1 +1,1 @@
-pm2 kill && pm2 start ./bin/www -i 2 -n api-2
+pm2 delete api-2 && pm2 start ./bin/www -i 2 -n api-2
