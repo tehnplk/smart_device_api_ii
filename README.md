@@ -4,13 +4,8 @@
 <li> Clone this repository</li>
 <li> edit file <b>config.json</b> to connect his</li>
 <li> run command in project root directory. </li>
-<li> run command  "npm install"
-<li> run command  "npm install -g pm2"</li>
-<li> run command  "npm install -g nodemon"</li>
-<li> run command  "pm2 start ./bin/www -n smart-device-api -i 2"
 </ul>
-<h1>AUTO BOOT</h1>
-<li>npm install --global --production windows-build-tools</li>
+<h1>AUTO RUN</h1>
 <li>npm install -g pm2 pm2-windows-startup</li>
 <li>pm2-startup install</li>
 <li>pm2 start ./bin/www -n api-2</li>
