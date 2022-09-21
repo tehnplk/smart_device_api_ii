@@ -10,6 +10,7 @@
 <li>pm2-startup install</li>
 <li>pm2 start ./bin/www -n api-2</li>
 <li>pm2 save</li>
+<li>pm2 log (check error)</li>
 <li><a href="https://moremeng.in.th/2020/11/how-to-startup-nodejs-when-boot-windows-and-linux.html" target="_blank">อ้างอิง</a></li>
 
 <h1>On Raspberry Pi</h2>
