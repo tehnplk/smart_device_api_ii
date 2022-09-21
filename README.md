@@ -3,7 +3,6 @@
 <li> Install Nodejs</li>
 <li> Clone this repository</li>
 <li> edit file <b>config.json</b> to connect his</li>
-<li> run command in project root directory. </li>
 </ul>
 <h1>AUTO RUN</h1>
 <li>npm install -g pm2 pm2-windows-startup</li>
