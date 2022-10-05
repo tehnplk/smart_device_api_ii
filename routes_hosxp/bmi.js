@@ -7,7 +7,8 @@ var config = require('../config.json')
 
 router.post('/post_data_bmi', async function (req, res, next) {
     data = req.body
-    console.log('post_data_bmi')
+    var _now  = moment().format('YYYY-MM-DD HH:mm:ss')
+    console.log(_now + 'post_data_bmi')
     console.log(data)
     r = await knex('opdscreen')
         .where('vn', '=', data.vn)
