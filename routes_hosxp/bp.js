@@ -7,6 +7,7 @@ var config = require('../config.json')
 
 router.post('/post_data_bp', async function (req, res, next) {
     data = req.body
+    console.log('post_data_bp')
     console.log(data)
     r = await knex('opdscreen')
         .where('vn', '=', data.vn)
