@@ -30,6 +30,7 @@ if (config.db.client == 'pg') {
             user: config.db.user,
             password: config.db.password,
             database: config.db.database,
+            requestTimeout: 30000,
         },
     }
 }
