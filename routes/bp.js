@@ -7,18 +7,34 @@ var config = require('../config.json')
 
 router.post('/post_data_bp', async function (req, res, next) {
     data = req.body
-    var _now  = moment().format('YYYY-MM-DD HH:mm:ss')
+    var _now = moment().format('YYYY-MM-DD HH:mm:ss')
     console.log(_now + 'post_data_bp')
     console.log(data)
-    r = await knex('opdscreen')
-        .where('vn', '=', data.vn)
-        .update({
-            temperature: data.data.tp,
-            bps: data.data.bps,
-            bpd: data.data.bpd,
-            pulse: data.data.pulse
-        })
-    res.json(r)
+    if (config.his == 'hosxp') {
+        r = await knex('opdscreen')
+            .where('vn', '=', data.vn)
+            .update({
+                temperature: data.data.tp,
+                bps: data.data.bps,
+                bpd: data.data.bpd,
+                pulse: data.data.pulse
+            })
+        res.json(r)
+    }
+
+    if (config.his == 'jhcis') {
+        r = await knex('visit')
+            .where('visitno', '=', data.vn)
+            .update({
+                temperature: data.data.tp,
+                pressure: data.data.bps+'/'+data.data.bpd,
+                pulse: data.data.pulse
+            })
+        res.json(r)
+    }
+
+
+
 
 });
 
@@ -40,6 +56,13 @@ router.post('/post_data_bp_list', async function (req, res, next) {
         });
         return false;
     }
+    if(config.his != 'hosxp'){
+        console.log('not hosxp')
+        res.json({
+            'his': 'not hosxp'
+        });
+        return false;
+    }
 
     //for mysql
     let sql = ` replace into opdscreen_bp 
@@ -55,7 +78,7 @@ router.post('/post_data_bp_list', async function (req, res, next) {
     SET vn=excluded.vn,bps=excluded.bps,bpd=excluded.bpd,pulse=excluded.pulse,
   depcode=excluded.depcode,staff=excluded.staff,screen_date=excluded.screen_date,screen_time=excluded.screen_time,temperature=excluded.temperature`
     }
-    console.log('client',config.db.client)
+    console.log('client', config.db.client)
     console.log(sql)
 
     try {

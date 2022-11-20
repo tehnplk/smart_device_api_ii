@@ -11,7 +11,8 @@ Connection_string = {
         user: config.db.user,
         password: config.db.password,
         database: config.db.database,
-        timezone: 'utc'
+        timezone: 'utc',
+        requestTimeout: 30000,
     },
     pool: {
         afterCreate: (conn, done) => {

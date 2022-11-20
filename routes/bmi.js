@@ -7,20 +7,35 @@ var config = require('../config.json')
 
 router.post('/post_data_bmi', async function (req, res, next) {
     data = req.body
-    var _now  = moment().format('YYYY-MM-DD HH:mm:ss')
+    var _now = moment().format('YYYY-MM-DD HH:mm:ss')
     console.log(_now + 'post_data_bmi')
     console.log(data)
-    r = await knex('opdscreen')
-        .where('vn', '=', data.vn)
-        .update({
-            bw: data.data.bw,
-            height:  Math.ceil(data.data.bh),
-            bmi: data.data.bmi
-        })
 
+    if (config.his == 'hosxp') {
+        r = await knex('opdscreen')
+            .where('vn', '=', data.vn)
+            .update({
+                bw: data.data.bw,
+                height: Math.ceil(data.data.bh),
+                bmi: data.data.bmi
+            })
         console.log(r)
-
         res.json(r)
+
+    }
+
+
+
+    if (config.his == 'jhcis') {
+        r = await knex('visit')
+            .where('visitno', '=', data.vn)
+            .update({
+                weight: data.data.bw,
+                height: Math.ceil(data.data.bh),
+            })
+        console.log(r)
+        res.json(r)
+    }
 
 });
 

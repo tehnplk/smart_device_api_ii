@@ -19,12 +19,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', require('./routes_hosxp/index'));
-app.use('/patient', require('./routes_hosxp/patient'))
-app.use('/bmi', require('./routes_hosxp/bmi'))
-app.use('/tp', require('./routes_hosxp/tp'))
-app.use('/bp', require('./routes_hosxp/bp'))
-app.use('/sp', require('./routes_hosxp/sp'))
+app.use('/', require('./routes/index'));
+app.use('/patient', require('./routes/patient'))
+app.use('/bmi', require('./routes/bmi'))
+app.use('/tp', require('./routes/tp'))
+app.use('/bp', require('./routes/bp'))
+app.use('/sp', require('./routes/sp'))
+
+app.use('/visit', require('./routes/visit'))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

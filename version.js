@@ -1,3 +1,3 @@
 exports.version = function () {
-  return "II-2.1.6 (2022-11-18)";
+  return "II-2.2.2 (2022-11-20)";
 };
