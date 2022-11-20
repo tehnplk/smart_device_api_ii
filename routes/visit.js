@@ -4,7 +4,7 @@ var knex = require('../con_db')
 var moment = require('moment')
 var config = require('../config.json')
 
-router.post('/open_visit', async function (req, res, next) {
+router.post('/open_visit_jhcis', async function (req, res, next) {
     data = req.body
     console.log('post data', data)
     cid = req.body.cid;
