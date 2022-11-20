@@ -36,7 +36,7 @@ router.post('/open_visit', async function (req, res, next) {
 
         if (today_visit !== undefined) {
             resp = {
-                'open_visit': 'found_today_visit',
+                'open_visit': 'today_visit_already',
             }
             console.log(resp);
             res.json(resp);
