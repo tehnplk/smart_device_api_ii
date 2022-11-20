@@ -8,6 +8,7 @@ router.post('/open_visit', async function (req, res, next) {
     data = req.body
     console.log('post data', data)
     cid = req.body.cid;
+    claimtype = req.body.claimtype;
     claimcode = req.body.claimcode;
 
 
@@ -31,11 +32,11 @@ router.post('/open_visit', async function (req, res, next) {
         timestart = moment().format('HH:mm:ss')
         dateupdate = moment().format('YYYY-MM-DD HH:mm:ss')
 
-        let today_visit = await knex('visit').where({ pid: pid, visitdate: visitdate }).whereNot({flagservice:'99'}).first()
+        let today_visit = await knex('visit').where({ pid: pid, visitdate: visitdate }).whereNot({ flagservice: '99' }).first()
 
         if (today_visit !== undefined) {
             resp = {
-                'open_visit': 'break found_today_visit'
+                'open_visit': 'found_today_visit',
             }
             console.log(resp);
             res.json(resp);
@@ -50,13 +51,13 @@ router.post('/open_visit', async function (req, res, next) {
             'visitdate': visitdate,
             'pcucodeperson': pcucodeperson,
             'pid': pid,
-            'timeservice': '1',
-            'timestart': '00',
+            //'timeservice': '',
+            'timestart': timestart,
             'rightcode': rightcode,
             'rightno': rightno,
             'hosmain': hosmain,
             'hossub': hossub,
-            'incup': '1',
+            //'incup': '',
             'receivepatient': '00',
             'refer': '00',
             'money1': 0,
@@ -80,7 +81,7 @@ router.post('/open_visit', async function (req, res, next) {
 
     } else {
         resp = {
-            'open_visit': 'not found person'
+            'open_visit': 'not found person',
         }
         console.log(resp)
         res.json(resp)
