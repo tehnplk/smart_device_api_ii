@@ -2,7 +2,6 @@
     "hoscode": "06278",
     "his_support": "hosxp|jhcis",
     "his": "jhcis",
-    "his_username": "chaow",
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",

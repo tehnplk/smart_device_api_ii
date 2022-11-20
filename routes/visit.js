@@ -10,6 +10,7 @@ router.post('/open_visit_jhcis', async function (req, res, next) {
     cid = req.body.cid;
     claimtype = req.body.claimtype;
     claimcode = req.body.claimcode;
+    vst_user = req.body.vst_user
 
 
 
@@ -63,7 +64,7 @@ router.post('/open_visit_jhcis', async function (req, res, next) {
             'money1': 0,
             'money2': 0,
             'money3': 0,
-            'username': config.his_username,
+            'username': vst_user,
             'flagservice': '01',
             'dateupdate': dateupdate,
             'ipv4this': '0.0.0.0',
