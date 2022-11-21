@@ -33,12 +33,26 @@ router.post('/open_visit_jhcis', async function (req, res, next) {
         timestart = moment().format('HH:mm:ss')
         dateupdate = moment().format('YYYY-MM-DD HH:mm:ss')
 
-        let today_visit = await knex('visit').where({ pid: pid, visitdate: visitdate }).whereNot({ flagservice: '99' }).first()
+        let today_visit = await knex('visit')
+            .where({ pid: pid, visitdate: visitdate })
+            .whereNot({ flagservice: '99' })
+            .orderBy('visitno', 'desc')
+            .first()
 
         if (today_visit !== undefined) {
+            vn = JSON.stringify(today_visit.visitno)
+            //console.log(vn)
+
+            u = await knex('visit').update({
+                'hiciauthen_nhso': claimcode
+            }).where('visitno', vn).whereNull('hiciauthen_nhso')
+
             resp = {
                 'open_visit': 'today_visit_already',
+                'vn': vn,
+                'update_claimcode': JSON.stringify(u)
             }
+
             console.log(resp);
             res.json(resp);
 
