@@ -178,7 +178,7 @@ router.get('/get_today_visit_by_cid/:cid', async function (req, res, next) {
 router.get('/get_today_visit_by_hn/:hn', async function (req, res, next) {
   hn = req.params.hn
   sql = `SELECT t.vstdate , t.vsttime, t.vn from  ovst t WHERE t.vstdate = CURRENT_DATE and t.hn = '${hn}' ORDER BY t.vn DESC limit 1`
-  
+
   if (config.his == 'jhcis') {
     sql = `select v.visitdate visit_date,v.timestart visit_time,v.visitno visit_number from visit v
     WHERE v.visitdate = CURRENT_DATE and v.pid = '${hn}' ORDER BY v.visitno DESC limit 1
@@ -187,8 +187,8 @@ router.get('/get_today_visit_by_hn/:hn', async function (req, res, next) {
 
   r = await knex.raw(sql)
 
-  
-  
+
+
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;

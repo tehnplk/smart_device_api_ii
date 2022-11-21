@@ -40,7 +40,7 @@ router.post('/open_visit_jhcis', async function (req, res, next) {
             .first()
 
         if (today_visit !== undefined) {
-            vn = JSON.stringify(today_visit.visitno)
+            vn = today_visit.visitno
             //console.log(vn)
 
             u = await knex('visit').update({
