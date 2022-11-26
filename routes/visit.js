@@ -4,6 +4,21 @@ var knex = require('../con_db')
 var moment = require('moment')
 var config = require('../config.json')
 
+router.post('/gen_queue', async (req, res) => {
+
+    try {
+        r = await knex("smart_queue").insert(req.body)
+        res.status(200).json(r)
+    } catch (error) {
+        res.status(400).json({
+            "err":error
+        })
+        return;
+    }
+   
+
+})
+
 router.post('/open_visit_jhcis', async function (req, res, next) {
     data = req.body
     console.log('post data', data)
