@@ -7,15 +7,21 @@ var config = require('../config.json')
 router.post('/gen_queue', async (req, res) => {
 
     try {
-        r = await knex("smart_queue").insert(req.body)
-        res.status(200).json(r)
+        r = await knex.raw("select max(queue_number)  as q from smart_queue where visit_date = CURRENT_DATE")
+        console.log('q', r[0][0].q)
+        data = req.body
+        data['queue_number'] = r[0][0].q+1
+        r = await knex("smart_queue").insert(data)
+        res.status(200).json({
+            "q":data['queue_number']
+        })
     } catch (error) {
         res.status(400).json({
-            "err":error
+            "err": error
         })
         return;
     }
-   
+
 
 })
 
