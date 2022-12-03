@@ -13,6 +13,7 @@ Connection_string = {
         database: config.db.database,
         timezone: 'utc',
         requestTimeout: 30000,
+        multipleStatements: true
     },
     pool: {
         afterCreate: (conn, done) => {
