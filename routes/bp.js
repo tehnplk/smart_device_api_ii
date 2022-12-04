@@ -19,6 +19,7 @@ router.post('/post_data_bp', async function (req, res, next) {
                 bpd: data.data.bpd,
                 pulse: data.data.pulse
             })
+        await knex.raw('UNLOCK TABLES')
         res.json(r)
     }
 
@@ -27,7 +28,7 @@ router.post('/post_data_bp', async function (req, res, next) {
             .where('visitno', '=', data.vn)
             .update({
                 temperature: data.data.tp,
-                pressure: data.data.bps+'/'+data.data.bpd,
+                pressure: data.data.bps + '/' + data.data.bpd,
                 pulse: data.data.pulse
             })
         res.json(r)
@@ -56,7 +57,7 @@ router.post('/post_data_bp_list', async function (req, res, next) {
         });
         return false;
     }
-    if(config.his != 'hosxp'){
+    if (config.his != 'hosxp') {
         console.log('not hosxp')
         res.json({
             'his': 'not hosxp'
