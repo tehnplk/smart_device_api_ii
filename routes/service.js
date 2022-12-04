@@ -5,21 +5,32 @@ var moment = require('moment')
 var config = require('../config.json')
 
 router.post('/gen_queue', async (req, res) => {
+    data = req.body
+    today = moment().format('YYYY-MM-DD')
+    q = await knex('smart_queue_pcu').where({ 'cid': data.cid, 'visit_date': today }).first()
+    if (q) {
+        res.status(200).json({
+            "q": q.queue_number
+        })
+        return;
+    }
 
     try {
-        r = await knex.raw("select max(queue_number)  as q from smart_queue where visit_date = CURRENT_DATE")
+
+        r = await knex.raw("select max(queue_number)  as q from smart_queue_pcu where visit_date = CURRENT_DATE")
         console.log('q', r[0][0].q)
-        data = req.body
+
         data['queue_number'] = r[0][0].q + 1
-        r = await knex("smart_queue").insert(data)
+        r = await knex("smart_queue_pcu").insert(data)
         res.status(200).json({
             "q": data['queue_number']
         })
+
     } catch (error) {
         res.status(400).json({
-            "err": error
+            "q": NaN
         })
-        return;
+
     }
 
 
@@ -87,12 +98,9 @@ router.post('/visit_jhcis', async function (req, res, next) {
             }).where('visitno', vn).whereNull('hiciauthen_nhso')
 
             resp = {
-                'open_visit': 'today_visit_already',
-                'vn': vn,
-                'update_claimcode': JSON.stringify(u)
+                'visit': 'exist',
+                'vn': vn
             }
-
-            console.log(resp);
             res.json(resp);
 
             return false
@@ -127,18 +135,10 @@ router.post('/visit_jhcis', async function (req, res, next) {
 
 
         await knex('visit').insert(data_visit);
-        resp = {
-            'open_visit': 'success'
-        }
-        console.log(resp)
-        res.json(resp)
+        res.status(200).json({ 'visit': 'success', 'vn': visitno });
 
     } else {
-        resp = {
-            'open_visit': 'not found person',
-        }
-        console.log(resp)
-        res.json(resp)
+        res.status(400).json({ 'visit': 'no patient', 'vn': NaN });
     }
 
 
@@ -149,14 +149,26 @@ router.post('/visit_jhcis', async function (req, res, next) {
 
 router.post('/visit_hosxp', async (req, res, next) => {
 
+    console.log(req.body)
     cid = req.body.cid;
-    console.log(cid)
     rightcode = req.body.rightcode;
     rightno = req.body.rightno;
     claimtype = req.body.claimtype;
     claimcode = req.body.claimcode;
 
-    patient = await knex('patient').where({ cid: cid }).first();
+
+
+    var CurrentDate = moment().format("YYYY-MM-DD");
+    visit = await knex('vn_stat').where({ 'vstdate': CurrentDate, 'cid': cid }).first()
+    if (visit) {
+
+        res.status(200).json({
+            'visit': 'exist',
+            'vn': visit.vn
+        });
+        return;
+    }
+
 
     gen_vn = await knex.raw(`
     
@@ -169,13 +181,16 @@ router.post('/visit_hosxp', async (req, res, next) => {
 `   );
     vn = gen_vn[0][4][0].vn;
 
-    if(!patient){
+    patient = await knex('patient').where({ cid: cid }).first();
+    if (!patient) {
         res.status(200).json({
-            'patient':NaN,
-            'vn':vn
+            'visit': 'no patient',
+            'vn': NaN
         })
         return;
     }
+
+
 
     try {
 
@@ -250,10 +265,10 @@ router.post('/visit_hosxp', async (req, res, next) => {
         
         
         
-        set @cliam_type = 'PG0060001';
-        set @cliam_code = 'PP123456';
+        set @claimtype = '${claimtype}';
+        set @claimcode = '${claimcode}';
         INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code) 
-        VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claim_type,@claim_code);
+        VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode);
         
         
         
@@ -275,10 +290,11 @@ router.post('/visit_hosxp', async (req, res, next) => {
 
 `);
         //console.dir(JSON.stringify(r))
-        res.status(200).json({ 'add': 'ok','vn':vn });
+        res.status(200).json({ 'visit': 'success', 'vn': vn });
 
     } catch (error) {
-        res.status(400).json({ 'err': error });
+        console.dir(error)
+        res.status(400).json({ 'visit': 'err', 'vn': NaN });
     }
 
 

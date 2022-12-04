@@ -1,15 +1,15 @@
 {
     "hoscode": "06278",
     "his_support": "hosxp|jhcis",
-    "his": "hosxp",
+    "his": "jhcis",
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",
         "host": "localhost",
-        "port": 3306,
+        "port": 3309,
         "user": "root",
         "password": "112233",
-        "database": "hosxp_pcu"
+        "database": "jhcisdb"
     },
     "api": {
         "port": 3000
