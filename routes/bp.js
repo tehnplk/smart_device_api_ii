@@ -14,7 +14,7 @@ router.post('/post_data_bp', async function (req, res, next) {
         r = await knex('opdscreen')
             .where('vn', '=', data.vn)
             .update({
-                temperature: data.data.tp,
+                //temperature: data.data.tp,
                 bps: data.data.bps,
                 bpd: data.data.bpd,
                 pulse: data.data.pulse
@@ -27,7 +27,7 @@ router.post('/post_data_bp', async function (req, res, next) {
         r = await knex('visit')
             .where('visitno', '=', data.vn)
             .update({
-                temperature: data.data.tp,
+                //temperature: data.data.tp,
                 pressure: data.data.bps + '/' + data.data.bpd,
                 pulse: data.data.pulse
             })

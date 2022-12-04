@@ -264,10 +264,8 @@ UNLOCK TABLES;
 
 
 
-set @cliam_type = '${claimtype}';
-set @cliam_code = '${claimcode}';
 INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code) 
-VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claim_type,@claim_code);
+VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),'${claimtype}','${claimcode}');
 
 
 

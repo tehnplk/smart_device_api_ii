@@ -17,6 +17,7 @@ router.post('/post_data_tp', async function (req, res, next) {
                 temperature: data.data.tp
             })
         console.log(r)
+        await knex.raw('UNLOCK TABLES')
         res.json(r)
     }
 
