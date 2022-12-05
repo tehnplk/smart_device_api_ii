@@ -9,7 +9,7 @@ data_none = {
   'fullname': NaN,
   'sex': NaN,
   'vn': NaN,
-  'birth': NaN
+  'birth': '1800-01-01'
 }
 router.get('/test', async function (req, res, next) {
   sql = "select vn , hn , vstdate,vsttime from ovst order by vn DESC limit 1"
@@ -93,7 +93,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     res.json(data_none)
     return false
   }
-  console.log(r[0][0])
+  
   data = {
     'hn': r[0][0].hn,
     'cid': r[0][0].cid,

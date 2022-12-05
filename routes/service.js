@@ -260,7 +260,11 @@ VALUES (@vn,@hn,'',@lastvisit,@doctor,'','','','','','',@sex,@age_y,@age_m,@age_
 set @bw = (select bw from opdscreen where hn = @hn and bw>0 and vn<@vn order by vn desc limit 1);
 set @height = (select height from opdscreen where hn = @hn and height>0 and vn<@vn order by vn desc limit 1);
 set @waist = (select waist from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
-INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist) VALUES (@guid2,@vn,@hn,@vstdate,@vsttime,@bw,@height,@waist);
+set @bps = (select bps from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
+set @bpd = (select bpd from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
+set @pulse = (select pulse from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
+set @temperature = '37.0';
+INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist,temperature,bps,bpd,pulse) VALUES (@guid2,@vn,@hn,@vstdate,@vsttime,@bw,@height,@waist,@temperature,@bps,@bpd,@pulse);
 UNLOCK TABLES;
 
 
