@@ -197,7 +197,8 @@ router.post('/visit_hosxp', async (req, res, next) => {
 
         await knex.raw(`
         
-        
+SET AUTOCOMMIT = 1;
+UNLOCK TABLES;       
 set @cid = '${cid}';
 set @hn = (SELECT hn from patient WHERE cid = @cid);
 set @sex = (select sex from patient WHERE cid = @cid);
@@ -263,10 +264,10 @@ INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist) VALUES (@
 UNLOCK TABLES;
 
 
-
+set @claimtype = (select if('${claimtype}'='null',NULL,'${claimtype}'));
+set @claimcode = (select if('${claimcode}'='null',NULL,'${claimcode}'));
 INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code) 
-VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),'${claimtype}','${claimcode}');
-
+VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode);
 
 
 set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3000001'));
@@ -281,7 +282,8 @@ VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,
 INSERT INTO dt_list (vn) VALUES (@vn);
 
 UPDATE patient SET last_visit= CURRENT_DATE WHERE  hn = @hn;
-      
+ 
+UNLOCK TABLES;
         
         `)
 
