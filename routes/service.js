@@ -134,9 +134,14 @@ router.post('/visit_jhcis', async function (req, res, next) {
 
         }
 
+        try {
+            await knex('visit').insert(data_visit);
+            res.status(200).json({ 'visit': 'success', 'vn': visitno });
+        } catch (error) {
+            console.debug(error)
+            res.status(400).json({ 'visit': 'fail', 'vn': NaN });
+        }
 
-        await knex('visit').insert(data_visit);
-        res.status(200).json({ 'visit': 'success', 'vn': visitno });
 
     } else {
         res.status(400).json({ 'visit': 'no patient', 'vn': NaN });
