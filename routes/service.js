@@ -270,8 +270,8 @@ UNLOCK TABLES;
 
 set @claimtype = (select if('${claimtype}'='null',NULL,'${claimtype}'));
 set @claimcode = (select if('${claimcode}'='null',NULL,'${claimcode}'));
-INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code) 
-VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode);
+INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code,auth_datetime) 
+VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode,now());
 
 
 set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3000001'));
