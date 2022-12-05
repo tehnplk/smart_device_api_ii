@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var knex = require('../con_db')
 var moment = require('moment')
-var config = require('../config.json')
+var config = require('../config.json');
+const { raw } = require('mysql');
 
 router.post('/gen_queue', async (req, res) => {
     data = req.body
@@ -336,6 +337,32 @@ router.get('/test', async (req, res, next) => {
     console.log(aid)
 
     res.json({ 'n': 'ok' })
+
+
+})
+
+router.get('/del-vn-today', async (req, res, next) => {
+
+    today = moment().format("YYYY-MM-DD")
+    r = await knex('ovst').where({ 'vstdate': today }).select('vn')
+    r.forEach(async (row) => {
+        vn = row.vn
+
+        u = await knex.raw(`
+            set @vn = '${vn}';
+
+            delete from vn_stat where vn = @vn;
+            DELETE FROM ovst WHERE vn = @vn;
+            DELETE FROM opdscreen WHERE vn = @vn;
+            delete from incoth where vn = @vn;
+            DELETE FROM opitemrece_summary WHERE vn = @vn;
+            DELETE FROM opitemrece WHERE vn = @vn;
+            DELETE from visit_pttype WHERE vn = @vn;
+            `)
+        console.dir(u)
+    });
+    res.json(r)
+
 
 
 })
