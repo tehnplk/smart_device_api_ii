@@ -20,7 +20,11 @@ router.post('/post_data_bmi', async function (req, res, next) {
                 bmi: data.data.bmi
             })
         console.log(r)
-        await knex.raw('UNLOCK TABLES')
+        await knex.raw(`
+        COMMIT;
+        UNLOCK TABLES;
+
+        `)
         res.json(r)
 
     }

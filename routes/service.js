@@ -319,6 +319,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         
         
         COMMIT;
+        UNLOCK TABLES;
         
         `)
 

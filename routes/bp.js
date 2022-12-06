@@ -19,7 +19,11 @@ router.post('/post_data_bp', async function (req, res, next) {
                 bpd: data.data.bpd,
                 pulse: data.data.pulse
             })
-        await knex.raw('UNLOCK TABLES')
+        await knex.raw(`
+        COMMIT;
+        UNLOCK TABLES;
+
+        `)
         res.json(r)
     }
 
