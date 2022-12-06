@@ -308,6 +308,8 @@ set @claimcode = (select if('${claimcode}'='null',NULL,'${claimcode}'));
 INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code,auth_datetime) 
 VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode,now());
 
+UNLOCK TABLES;
+COMMIT;
         
         `)
 
