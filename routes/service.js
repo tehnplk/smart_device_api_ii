@@ -291,14 +291,9 @@ INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist,temperatur
 UNLOCK TABLES;
 
 
-set @claimtype = (select if('${claimtype}'='null',NULL,'${claimtype}'));
-set @claimcode = (select if('${claimcode}'='null',NULL,'${claimcode}'));
-INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code,auth_datetime) 
-VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode,now());
-
 
 set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3000001'));
-set @price := 50;
+set @price :=  (SELECT IF(@visit_type = 'O' ,'50','30'));
 INSERT INTO opitemrece (hos_guid,vn,hn,icode,qty,unitprice,vstdate,vsttime,
 staff,item_no,last_modified,sum_price) 
 VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,
@@ -307,10 +302,14 @@ VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,
 
 
 INSERT INTO dt_list (vn) VALUES (@vn);
-
 UPDATE patient SET last_visit= CURRENT_DATE WHERE  hn = @hn;
- 
 UNLOCK TABLES;
+
+set @claimtype = (select if('${claimtype}'='null',NULL,'${claimtype}'));
+set @claimcode = (select if('${claimcode}'='null',NULL,'${claimcode}'));
+INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code,auth_datetime) 
+VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode,now());
+
         
         `)
 
