@@ -223,9 +223,9 @@ router.post('/visit_hosxp', async (req, res, next) => {
 
         SET AUTOCOMMIT = 1;
 
-        set @cid = ${cid};
-        set @claim_type = ${claimtype};
-        set @claim_code = ${claimcode};
+        set @cid = '${cid}';
+        set @claim_type = '${claimtype}';
+        set @claim_code = '${claimcode}';
         
         
         set @hn = (SELECT hn from patient WHERE cid = @cid);
