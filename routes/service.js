@@ -180,11 +180,8 @@ router.post('/visit_hosxp', async (req, res, next) => {
     claimcode = req.body.claimcode;
 
 
-
-
-
-
     var CurrentDate = moment().format("YYYY-MM-DD");
+
     visit = await knex('vn_stat').where({ 'vstdate': CurrentDate, 'cid': cid }).first()
     if (visit) {
 
@@ -199,6 +196,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
 
 
     patient = await knex('patient').where({ cid: cid }).first();
+    
     if (!patient) {
         res.status(200).json({
             'visit': 'no patient',
@@ -216,12 +214,12 @@ router.post('/visit_hosxp', async (req, res, next) => {
     vn = y + n;
 
     try {
-
         // hosxp_pcu
         await knex.raw(`
         
 
-        SET AUTOCOMMIT = 1;
+        SET AUTOCOMMIT = 0;
+        START TRANSACTION;
 
         set @cid = '${cid}';
         set @claim_type = '${claimtype}';
@@ -237,7 +235,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         set @moopart = (SELECT moopart from patient where cid = @cid); # หมู่ที่
         
         
-        set @pttype = (select pttype from  person where cid = @cid);
+        set @pttype = (select pttype from  patient where cid = @cid);
         set @pttypeno = (select pttype_no from  person where cid = @cid);
         set @hospmain = (select pttype_hospmain from  person where cid = @cid);
         set @hospsub = (select pttype_hospsub from  person where cid = @cid);
@@ -321,7 +319,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         
         UPDATE patient SET last_visit= CURRENT_DATE WHERE  hn = @hn;
         
-        
+        COMMIT;
         
         `)
 
@@ -330,6 +328,11 @@ router.post('/visit_hosxp', async (req, res, next) => {
 
     } catch (error) {
         console.dir(error)
+        await knex.raw(`
+            UNLOCK TABLES;
+            ROLLBACK;
+
+        `)
         res.status(400).json({ 'visit': 'err', 'vn': NaN });
     }
 
@@ -399,6 +402,8 @@ router.get('/del-vn-today', async (req, res, next) => {
 
 
 })
+
+
 
 
 
