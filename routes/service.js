@@ -294,10 +294,8 @@ UNLOCK TABLES;
 
 set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3000001'));
 set @price :=  (SELECT IF(@visit_type = 'O' ,'50','30'));
-INSERT INTO opitemrece (hos_guid,vn,hn,icode,qty,unitprice,vstdate,vsttime,
-staff,item_no,last_modified,sum_price) 
-VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,
-@staff,1,NOW(),@price);
+INSERT INTO opitemrece (hos_guid,vn,hn,icode,qty,unitprice,vstdate,vsttime,staff,item_no,last_modified,sum_price) 
+VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,@staff,1,NOW(),@price);
 
 
 
