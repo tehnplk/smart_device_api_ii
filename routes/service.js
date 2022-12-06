@@ -185,6 +185,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
     visit = await knex('vn_stat').where({ 'vstdate': CurrentDate, 'cid': cid }).first()
     if (visit) {
 
+        console.log({ 'visit': 'exist', 'vn': visit.vn })
         res.status(200).json({
             'visit': 'exist',
             'vn': visit.vn
@@ -196,8 +197,9 @@ router.post('/visit_hosxp', async (req, res, next) => {
 
 
     patient = await knex('patient').where({ cid: cid }).first();
-    
+
     if (!patient) {
+        console.log({ 'visit': 'no patient', 'vn': NaN })
         res.status(200).json({
             'visit': 'no patient',
             'vn': NaN
@@ -217,7 +219,6 @@ router.post('/visit_hosxp', async (req, res, next) => {
         // hosxp_pcu
         await knex.raw(`
         
-
         SET AUTOCOMMIT = 0;
         START TRANSACTION;
 
@@ -248,6 +249,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         set @dd = LPAD(DAY(CURRENT_DATE),2,0);
         set @tt = TIME_FORMAT(TIME(NOW()),'%H%i%s');
         
+
         set @vn =  concat( @yy, @mm , @dd  , @tt);
         set @vstdate = CURRENT_DATE;
         set @vsttime = CURRENT_TIME;
@@ -266,6 +268,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         set @visit_type = ( SELECT   IF( (CURRENT_TIME  >= '16:30:00') OR (CURRENT_TIME <= '08:30:00') or (CURRENT_DATE in (SELECT holiday_date from holiday)),'O','I') );
         set @lastvisit = 0;
         
+
         INSERT INTO vn_insert (vn) VALUES (@vn);
         INSERT INTO vn_stat_signature (vn) VALUES (@vn);
         
@@ -276,8 +279,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         
         INSERT INTO ovst_seq (vn,seq_id,nhso_seq_id,update_datetime,promote_visit,last_check_datetime)
         VALUES (@vn,@ovst_seq_id,@nhso_seq_id,NOW(),'N',NOW()); # complete
-        
-        
+                
         
         INSERT INTO vn_stat (vn,hn,pdx,lastvisit,dx_doctor,
         dx0,dx1,dx2,dx3,dx4,dx5,sex,age_y,age_m,age_d,aid,moopart,pttype,spclty,vstdate
@@ -285,8 +287,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         VALUES (@vn,@hn,'',@lastvisit,@doctor,'','','','','','',@sex,@age_y,@age_m,@age_d,@aid,@moopart,@pttype
         ,@spclty,@vstdate,@pcode,@hcode,@hospmain,@hospsub,@pttypeno,@cid);
         
-        
-        
+                
         set @bw = (select bw from opdscreen where hn = @hn and bw>0 and vn<@vn order by vn desc limit 1);
         set @height = (select height from opdscreen where hn = @hn and height>0 and vn<@vn order by vn desc limit 1);
         set @waist = (select waist from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
@@ -297,13 +298,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist,bps,bpd,pulse,temperature) 
         VALUES (@guid2,@vn,@hn,@vstdate,@vsttime,@bw,@height,@waist,@bps,@bpd,@pulse,@temperature);
         UNLOCK TABLES;
-        
-        
-        
-        
-        INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code) 
-        VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claim_type,@claim_code);
-        
+                             
         
         
         set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3000001'));
@@ -311,23 +306,28 @@ router.post('/visit_hosxp', async (req, res, next) => {
         INSERT INTO opitemrece (hos_guid,vn,hn,icode,qty,unitprice,vstdate,vsttime,
         staff,item_no,last_modified,sum_price) 
         VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,
-        @staff,1,NOW(),@price);
-        
+        @staff,1,NOW(),@price);       
         
         
         INSERT INTO dt_list (vn) VALUES (@vn);
         
         UPDATE patient SET last_visit= CURRENT_DATE WHERE  hn = @hn;
+
+        
+        INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code) 
+        VALUES (@vn, '00', @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claim_type,@claim_code);
+        
         
         COMMIT;
         
         `)
 
+        console.log({ 'visit': 'success', 'vn': vn })
 
         res.status(200).json({ 'visit': 'success', 'vn': vn });
 
     } catch (error) {
-        console.dir(error)
+        console.dir(error.sqlMessage)
         await knex.raw(`
             UNLOCK TABLES;
             ROLLBACK;
