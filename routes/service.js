@@ -217,99 +217,111 @@ router.post('/visit_hosxp', async (req, res, next) => {
 
     try {
 
-
+        // hosxp_pcu
         await knex.raw(`
         
-SET AUTOCOMMIT = 1;
-UNLOCK TABLES;       
-set @cid = '${cid}';
-set @hn = (SELECT hn from patient WHERE cid = @cid);
-set @sex = (select sex from patient WHERE cid = @cid);
-set @age_y = (SELECT TIMESTAMPDIFF( YEAR, t.birthday, NOW() ) from patient t WHERE t.cid = @cid );
-set @age_m = (SELECT TIMESTAMPDIFF( MONTH,t.birthday, now() ) % 12 from patient t WHERE t.cid = @cid );
-set @age_d = (SELECT FLOOR( TIMESTAMPDIFF( DAY, t.birthday, now() ) % 30.4375 ) from patient t WHERE t.cid = @cid );
-set @aid = (SELECT CONCAT(chwpart,amppart,tmbpart) from patient where cid = @cid); # รหัสจังหวัด อำเภอ ตำบล
-set @moopart = (SELECT moopart from patient where cid = @cid); # หมู่ที่
 
+        SET AUTOCOMMIT = 1;
 
-set @pttype = (select pttype from patient where cid = @cid);
-set @pttypeno = (select pttype_no from patient where cid = @cid);
-set @hospmain = (select pttype_hospmain from patient where cid = @cid);
-set @hospsub = (select pttype_hospsub from patient where cid = @cid);
-set @pcode = (SELECT pttype.pcode FROM person INNER JOIN pttype ON person.pttype = pttype.pttype where person.cid=@cid);
-set @hcode = (SELECT hospitalcode FROM opdconfig LIMIT 1); 
-
-
-
-
-set @vn =  '${vn}';
-set @vstdate = CURRENT_DATE;
-set @vsttime = CURRENT_TIME;
-set @guid1 = (select concat('{',UPPER(UUID()),'}'));
-set @guid2 = (select concat('{',UPPER(UUID()),'}'));
-set @ovst_seq_id = (select get_serialnumber('ovst_seq_id'));
-set @nhso_seq_id = @ovst_seq_id;
-set @ovst_q_today = concat('ovst-q-',LEFT(@vn,6));
-set @ovst_q = (select get_serialnumber(@ovst_q_today));
-
-set @doctor = '${req.body.vst_user}';
-set @staff = @doctor;
-set @dep = '019'; #ห้องตรวจ
-set @spclty = '01'; #แผนก
-set @ovstlist = '01'; #มาเอง
-set @visit_type = ( SELECT   IF( (CURRENT_TIME  >= '16:30:00') OR (CURRENT_TIME <= '08:30:00') or (CURRENT_DATE in (SELECT holiday_date from holiday)),'O','I') );
-set @lastvisit = 0;
-
-INSERT INTO vn_insert (vn) VALUES (@vn);
-INSERT INTO vn_stat_signature (vn) VALUES (@vn);
-
-
-INSERT INTO ovst (hos_guid,vn,hn,vstdate,vsttime,doctor,hospmain,hospsub,oqueue,ovstist,pttype,pttypeno,spclty,cur_dep,pt_subtype,visit_type,staff) 
-VALUES (@guid1,@vn,@hn,@vstdate,@vsttime,@doctor,@hospmain,@hospsub,@ovst_q,@ovstlist,@pttype,@pttypeno,@spclty,@dep,0,@visit_type,@staff);
-
-
-INSERT INTO ovst_seq (vn,seq_id,nhso_seq_id,update_datetime,promote_visit,last_check_datetime)
-VALUES (@vn,@ovst_seq_id,@nhso_seq_id,NOW(),'N',NOW()); # complete
-
-
-
-INSERT INTO vn_stat (vn,hn,pdx,lastvisit,dx_doctor,
-dx0,dx1,dx2,dx3,dx4,dx5,sex,age_y,age_m,age_d,aid,moopart,pttype,spclty,vstdate
-,pcode,hcode,hospmain,hospsub,pttypeno,cid) 
-VALUES (@vn,@hn,'',@lastvisit,@doctor,'','','','','','',@sex,@age_y,@age_m,@age_d,@aid,@moopart,@pttype
-,@spclty,@vstdate,@pcode,@hcode,@hospmain,@hospsub,@pttypeno,@cid);
-
-
-set @bw = (select bw from opdscreen where hn = @hn and bw>0 and vn<@vn order by vn desc limit 1);
-set @height = (select height from opdscreen where hn = @hn and height>0 and vn<@vn order by vn desc limit 1);
-set @waist = (select waist from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
-set @bps = (select bps from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
-set @bpd = (select bpd from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
-set @pulse = (select pulse from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
-set @temperature = '37.0';
-INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist,temperature,bps,bpd,pulse) VALUES (@guid2,@vn,@hn,@vstdate,@vsttime,@bw,@height,@waist,@temperature,@bps,@bpd,@pulse);
-UNLOCK TABLES;
-
-
-
-set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3000001'));
-set @price :=  (SELECT IF(@visit_type = 'O' ,'50','30'));
-INSERT INTO opitemrece (hos_guid,vn,hn,icode,qty,unitprice,vstdate,vsttime,staff,item_no,last_modified,sum_price) 
-VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,@staff,1,NOW(),@price);
-
-
-
-INSERT INTO dt_list (vn) VALUES (@vn);
-UPDATE patient SET last_visit= CURRENT_DATE WHERE  hn = @hn;
-UNLOCK TABLES;
-
-set @claimtype = (select if('${claimtype}'='null',NULL,'${claimtype}'));
-set @claimcode = (select if('${claimcode}'='null',NULL,'${claimcode}'));
-INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code,auth_datetime) 
-VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claimtype,@claimcode,now());
-
-UNLOCK TABLES;
-COMMIT;
+        set @cid = ${cid};
+        set @claim_type = ${claimtype};
+        set @claim_code = ${claimcode};
+        
+        
+        set @hn = (SELECT hn from patient WHERE cid = @cid);
+        set @sex = (select sex from patient WHERE cid = @cid);
+        set @age_y = (SELECT TIMESTAMPDIFF( YEAR, t.birthday, NOW() ) from patient t WHERE t.cid = @cid );
+        set @age_m = (SELECT TIMESTAMPDIFF( MONTH,t.birthday, now() ) % 12 from patient t WHERE t.cid = @cid );
+        set @age_d = (SELECT FLOOR( TIMESTAMPDIFF( DAY, t.birthday, now() ) % 30.4375 ) from patient t WHERE t.cid = @cid );
+        set @aid = (SELECT CONCAT(chwpart,amppart,tmbpart) from patient where cid = @cid); # รหัสจังหวัด อำเภอ ตำบล
+        set @moopart = (SELECT moopart from patient where cid = @cid); # หมู่ที่
+        
+        
+        set @pttype = (select pttype from  person where cid = @cid);
+        set @pttypeno = (select pttype_no from  person where cid = @cid);
+        set @hospmain = (select pttype_hospmain from  person where cid = @cid);
+        set @hospsub = (select pttype_hospsub from  person where cid = @cid);
+        set @pcode = (SELECT pttype.pcode FROM person INNER JOIN pttype ON person.pttype = pttype.pttype where person.cid=@cid);
+        set @hcode = (SELECT hospitalcode FROM opdconfig LIMIT 1); 
+        
+        
+        set @yy = RIGHT(YEAR(CURRENT_DATE)+543,2);
+        set @mm = LPAD(MONTH(CURRENT_DATE),2,0);
+        set @dd = LPAD(DAY(CURRENT_DATE),2,0);
+        set @tt = TIME_FORMAT(TIME(NOW()),'%H%i%s');
+        
+        set @vn =  concat( @yy, @mm , @dd  , @tt);
+        set @vstdate = CURRENT_DATE;
+        set @vsttime = CURRENT_TIME;
+        set @guid1 = (select concat('{',UPPER(UUID()),'}'));
+        set @guid2 = (select concat('{',UPPER(UUID()),'}'));
+        set @ovst_seq_id = (select get_serialnumber('ovst_seq_id'));
+        set @nhso_seq_id = @ovst_seq_id;
+        set @ovst_q_today = concat('ovst-q-',LEFT(@vn,6));
+        set @ovst_q = (select get_serialnumber(@ovst_q_today));
+        
+        set @doctor = '001';
+        set @staff = @doctor;
+        set @dep = '019'; #ห้องตรวจ
+        set @spclty = '01'; #แผนก
+        set @ovstlist = '01'; #มาเอง
+        set @visit_type = ( SELECT   IF( (CURRENT_TIME  >= '16:30:00') OR (CURRENT_TIME <= '08:30:00') or (CURRENT_DATE in (SELECT holiday_date from holiday)),'O','I') );
+        set @lastvisit = 0;
+        
+        INSERT INTO vn_insert (vn) VALUES (@vn);
+        INSERT INTO vn_stat_signature (vn) VALUES (@vn);
+        
+        
+        INSERT INTO ovst (hos_guid,vn,hn,vstdate,vsttime,doctor,hospmain,hospsub,oqueue,ovstist,pttype,pttypeno,spclty,cur_dep,pt_subtype,visit_type,staff) 
+        VALUES (@guid1,@vn,@hn,@vstdate,@vsttime,@doctor,@hospmain,@hospsub,@ovst_q,@ovstlist,@pttype,@pttypeno,@spclty,@dep,0,@visit_type,@staff);
+        
+        
+        INSERT INTO ovst_seq (vn,seq_id,nhso_seq_id,update_datetime,promote_visit,last_check_datetime)
+        VALUES (@vn,@ovst_seq_id,@nhso_seq_id,NOW(),'N',NOW()); # complete
+        
+        
+        
+        INSERT INTO vn_stat (vn,hn,pdx,lastvisit,dx_doctor,
+        dx0,dx1,dx2,dx3,dx4,dx5,sex,age_y,age_m,age_d,aid,moopart,pttype,spclty,vstdate
+        ,pcode,hcode,hospmain,hospsub,pttypeno,cid) 
+        VALUES (@vn,@hn,'',@lastvisit,@doctor,'','','','','','',@sex,@age_y,@age_m,@age_d,@aid,@moopart,@pttype
+        ,@spclty,@vstdate,@pcode,@hcode,@hospmain,@hospsub,@pttypeno,@cid);
+        
+        
+        
+        set @bw = (select bw from opdscreen where hn = @hn and bw>0 and vn<@vn order by vn desc limit 1);
+        set @height = (select height from opdscreen where hn = @hn and height>0 and vn<@vn order by vn desc limit 1);
+        set @waist = (select waist from opdscreen where hn = @hn and waist>0 and vn<@vn order by vn desc limit 1);
+        set @bps = (select bps from opdscreen where hn = @hn  and vn<@vn order by vn desc limit 1);
+        set @bpd = (select bpd from opdscreen where hn = @hn  and vn<@vn order by vn desc limit 1);
+        set @pulse = (select pulse from opdscreen where hn = @hn and vn<@vn order by vn desc limit 1);
+        set @temperature = '37.0';
+        INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist,bps,bpd,pulse,temperature) 
+        VALUES (@guid2,@vn,@hn,@vstdate,@vsttime,@bw,@height,@waist,@bps,@bpd,@pulse,@temperature);
+        UNLOCK TABLES;
+        
+        
+        
+        
+        INSERT INTO visit_pttype (vn, pttype, staff, hospmain, hospsub, pttypeno, update_datetime,pttype_note,auth_code) 
+        VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claim_type,@claim_code);
+        
+        
+        
+        set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3000001'));
+        set @price :=  (SELECT IF(@visit_type = 'O' ,'50','30'));
+        INSERT INTO opitemrece (hos_guid,vn,hn,icode,qty,unitprice,vstdate,vsttime,
+        staff,item_no,last_modified,sum_price) 
+        VALUES (@guid2,@vn,@hn,@icode,1,@price,@vstdate,@vsttime,
+        @staff,1,NOW(),@price);
+        
+        
+        
+        INSERT INTO dt_list (vn) VALUES (@vn);
+        
+        UPDATE patient SET last_visit= CURRENT_DATE WHERE  hn = @hn;
+        
+        
         
         `)
 
