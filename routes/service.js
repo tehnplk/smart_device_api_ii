@@ -102,10 +102,25 @@ router.post('/visit_jhcis', async function (req, res, next) {
                 'visit': 'exist',
                 'vn': vn
             }
+            await knex.raw('UNLOCK TABLES')
             res.json(resp);
 
             return false
         }
+
+        sql = `
+set @pid = ${pid};  
+set @weight = (select t.weight from visit  t where t.pid = @pid and t.weight IS NOT NULL and t.visitdate < CURRENT_DATE order by t.visitno desc limit 1);
+set @height = (select t.height from visit  t where t.pid = @pid and t.height IS NOT NULL and t.visitdate < CURRENT_DATE order by t.visitno desc limit 1);
+set @pressure = (select t.pressure from visit  t where t.pid = @pid and t.pressure IS NOT NULL and t.visitdate < CURRENT_DATE order by t.visitno desc limit 1);
+set @respri = (select t.respri from visit  t where t.pid = @pid and t.respri IS NOT NULL and t.visitdate < CURRENT_DATE order by t.visitno desc limit 1);
+set @temperature = (select t.temperature from visit  t where t.pid = @pid and t.temperature IS NOT NULL and t.visitdate < CURRENT_DATE order by t.visitno desc limit 1);
+set @waist = (select t.waist from visit  t where t.pid = @pid and t.waist IS NOT NULL and t.visitdate < CURRENT_DATE order by t.visitno desc limit 1);
+
+SELECT @weight as weight ,@height as height ,@pressure as pressure,@respri as respri,@temperature as temperature,@waist as waist;
+        `
+        row = await knex.raw(sql)
+        console.log(row[0])
 
 
         data_visit = {
@@ -140,6 +155,8 @@ router.post('/visit_jhcis', async function (req, res, next) {
         } catch (error) {
             console.debug(error)
             res.status(400).json({ 'visit': 'fail', 'vn': NaN });
+        } finally {
+            await knex.raw('UNLOCK TABLES')
         }
 
 

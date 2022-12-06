@@ -31,6 +31,7 @@ router.post('/post_data_bp', async function (req, res, next) {
                 pressure: data.data.bps + '/' + data.data.bpd,
                 pulse: data.data.pulse
             })
+        await knex.raw('UNLOCK TABLES')
         res.json(r)
     }
 
