@@ -219,7 +219,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         // hosxp_pcu
         await knex.raw(`
         
-        SET AUTOCOMMIT = 0;
+        
         START TRANSACTION;
 
         set @cid = '${cid}';
@@ -237,7 +237,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         
         
         set @pttype = (select pttype from  patient where cid = @cid);
-        set @pttypeno = (select pttype_no from  person where cid = @cid);
+        set @pttypeno = (select pttype_no from  patient where cid = @cid);
         set @hospmain = (select pttype_hospmain from  person where cid = @cid);
         set @hospsub = (select pttype_hospsub from  person where cid = @cid);
         set @pcode = (SELECT pttype.pcode FROM person INNER JOIN pttype ON person.pttype = pttype.pttype where person.cid=@cid);
@@ -319,7 +319,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         
         
         COMMIT;
-        UNLOCK TABLES;
+        
         
         `)
 
