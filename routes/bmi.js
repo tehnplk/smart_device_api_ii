@@ -65,6 +65,14 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
 
 });
 
+router.post('/post_data_bmi_log2', async function (req, res, next) {
+    data = req.body
+    console.log(data)
+    r = await knex('smart_gate_bmi').insert(data)
+    res.json(r)
+
+});
+
 
 
 

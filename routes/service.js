@@ -297,7 +297,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
         set @temperature = '37.0';
         INSERT INTO opdscreen (hos_guid,vn,hn,vstdate,vsttime,bw,height,waist,bps,bpd,pulse,temperature) 
         VALUES (@guid2,@vn,@hn,@vstdate,@vsttime,@bw,@height,@waist,@bps,@bpd,@pulse,@temperature);
-        UNLOCK TABLES;
+        
                              
         
         
