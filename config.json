@@ -1,6 +1,6 @@
 {
     "hoscode": "07480",
-    "his_support": "hosxp|jhcis",
+    "his_support": "hosxp|jhcis|him",
     "his": "hosxp",
     "db": {
         "client_support": "mysql | pg",

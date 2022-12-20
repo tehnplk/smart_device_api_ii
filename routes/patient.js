@@ -48,6 +48,13 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
     where p.idcard = '${cid}' limit 1`
   }
 
+  if(config.his == 'him'){
+    sql = `select hn,REPLACE(cardid,'-','') as cid,fullname,null sex
+    ,concat(hn,'|',regdate,'|',frequency) as vn
+    ,null as birth  from opd where  REPLACE(cardid,'-','') = '${cid}' 
+    where regdate = CURRENT_DATE order by timereg desc limit 1`
+}
+
   r = await knex.raw(sql)
 
   if (config.db.client == 'pg') {
@@ -82,6 +89,13 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     from person p  left join ctitle c on c.titlecode = p.prename
     where p.pid = '${hn}' limit 1`
   }
+  
+  if(config.his == 'him'){
+    sql = `select hn,REPLACE(cardid,'-','') as cid,fullname,null sex
+    ,concat(hn,'|',regdate,'|',frequency) as vn
+    ,null as birth  from opd where  hn = '${hn}' 
+    where regdate = CURRENT_DATE order by timereg desc limit 1`
+}
 
   r = await knex.raw(sql)
 

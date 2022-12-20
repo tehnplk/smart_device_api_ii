@@ -404,6 +404,33 @@ router.get('/del-vn-today', async (req, res, next) => {
 
 })
 
+router.get('/del-vn-date/:d', async (req, res, next) => {
+    const {d}= req.params
+    console.log(d)
+    today = d
+    r = await knex('ovst').where({ 'vstdate': today }).select('vn')
+    r.forEach(async (row) => {
+        vn = row.vn
+
+        u = await knex.raw(`
+            set @vn = '${vn}';
+
+            delete from vn_stat where vn = @vn;
+            DELETE FROM ovst WHERE vn = @vn;
+            DELETE FROM opdscreen WHERE vn = @vn;
+            delete from incoth where vn = @vn;
+            DELETE FROM opitemrece_summary WHERE vn = @vn;
+            DELETE FROM opitemrece WHERE vn = @vn;
+            DELETE from visit_pttype WHERE vn = @vn;
+            `)
+        console.dir(u)
+    });
+    res.json(r)
+
+
+
+})
+
 
 
 
