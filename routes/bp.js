@@ -19,11 +19,6 @@ router.post('/post_data_bp', async function (req, res, next) {
                 bpd: data.data.bpd,
                 pulse: data.data.pulse
             })
-        await knex.raw(`
-        COMMIT;
-        UNLOCK TABLES;
-
-        `)
         res.json(r)
     }
 
@@ -35,7 +30,49 @@ router.post('/post_data_bp', async function (req, res, next) {
                 pressure: data.data.bps + '/' + data.data.bpd,
                 pulse: data.data.pulse
             })
-        await knex.raw('UNLOCK TABLES')
+        res.json(r)
+    }
+
+    if (config.his == 'him') {
+
+        console.log('Him',req.body);
+		raw = req.body
+
+        let vn = raw.vn;
+        let hpressure = raw.data.bps;
+        let lpressure = raw.data.bpd;
+        let pulse = raw.data.pulse;
+
+        console.log('POST BP DATA = ', vn, hpressure, lpressure, pulse);
+		
+		if(!vn){
+			res.json({'vn':''})
+			return false;
+		}
+
+        let p = vn.split('|');
+        if (p.length != 3) {
+            console.log('No hn.')
+            res.json({
+                'effect': 0
+            })
+            return false;
+        }
+        let hn = p[0];
+        let regdate = p[1];
+        let frequency = p[2];
+
+        r = await knex('opd')
+            .where({
+                'hn': hn,
+                'regdate': regdate,
+                'frequency': frequency
+            })
+            .update({
+                hpressure: hpressure,
+                lpressure: lpressure,
+                pulse: pulse
+            })
         res.json(r)
     }
 

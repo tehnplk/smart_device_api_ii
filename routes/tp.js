@@ -9,19 +9,13 @@ router.post('/post_data_tp', async function (req, res, next) {
     data = req.body
     var _now = moment().format('YYYY-MM-DD HH:mm:ss')
     console.log(_now + 'post_data_tp')
-    console.log(data)
+    console.log('post data',data)
     if (config.his == 'hosxp') {
         r = await knex('opdscreen')
             .where('vn', '=', data.vn)
             .update({
                 temperature: data.data.tp
             })
-        console.log(r)
-        await knex.raw(`
-        COMMIT;
-        UNLOCK TABLES;
-
-        `)
         res.json(r)
     }
 
@@ -32,8 +26,42 @@ router.post('/post_data_tp', async function (req, res, next) {
             .update({
                 temperature: data.data.tp
             })
-        console.log(r)
-        await knex.raw('UNLOCK TABLES')
+        res.json(r)
+    }
+
+    if (config.his == 'him') {
+		console.log('Him',req.body)
+		raw = req.body
+        let vn = raw.vn;
+        let temperature = raw.data.tp
+
+        console.log('POST TP DATA = ', vn, temperature);
+		if(!vn){
+			res.json({'vn':''})
+			return false;
+		}
+
+        let p = vn.split('|');
+        if (p.length != 3) {
+            console.log('No hn.')
+            res.json({
+                'effect': 0
+            })
+            return false;
+        }
+        let hn = p[0];
+        let regdate = p[1];
+        let frequency = p[2];
+
+        r = await knex('opd')
+            .where({
+                'hn': hn,
+                'regdate': regdate,
+                'frequency': frequency
+            })
+            .update({
+                temper: temperature,
+            })
         res.json(r)
     }
 

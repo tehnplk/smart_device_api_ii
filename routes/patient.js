@@ -17,6 +17,15 @@ router.get('/test', async function (req, res, next) {
     sql = "select visitno as vn ,pid as hn , visitdate as vstdate,timestart as vsttime from visit order by visitno DESC limit 1"
   }
 
+  if (config.his == 'him'){
+    sql = `select  concat(hn,'|',regdate,'|',frequency) as vn
+    , hn
+    ,regdate as vstdate
+    ,timereg as vsttime
+    from opd
+    where regdate = CURRENT_DATE order by timereg desc limit 1`
+  }
+
   r = await knex.raw(sql)
 
   if (config.db.client == 'pg') {
@@ -52,7 +61,7 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
     sql = `select hn,REPLACE(cardid,'-','') as cid,fullname,null sex
     ,concat(hn,'|',regdate,'|',frequency) as vn
     ,null as birth  from opd where  REPLACE(cardid,'-','') = '${cid}' 
-    where regdate = CURRENT_DATE order by timereg desc limit 1`
+    and regdate = CURRENT_DATE order by timereg desc limit 1`
 }
 
   r = await knex.raw(sql)
@@ -94,7 +103,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     sql = `select hn,REPLACE(cardid,'-','') as cid,fullname,null sex
     ,concat(hn,'|',regdate,'|',frequency) as vn
     ,null as birth  from opd where  hn = '${hn}' 
-    where regdate = CURRENT_DATE order by timereg desc limit 1`
+    and regdate = CURRENT_DATE order by timereg desc limit 1`
 }
 
   r = await knex.raw(sql)
