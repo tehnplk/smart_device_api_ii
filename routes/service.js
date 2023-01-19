@@ -173,7 +173,9 @@ SELECT @weight as weight ,@height as height ,@pressure as pressure,@respri as re
 
 router.post('/visit_hosxp', async (req, res, next) => {
 
-    console.log(req.body)
+    console.log('visit_hosxp',req.body)
+    //res.status(200).json({ 'visit': 'test', 'vn': '0000'});
+    //return;
     cid = req.body.cid;
 
 
