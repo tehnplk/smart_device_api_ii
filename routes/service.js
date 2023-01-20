@@ -216,6 +216,10 @@ router.post('/visit_hosxp', async (req, res, next) => {
     y = y.slice(2)
     n = moment().format("MMDDHHmmss")
     vn = y + n;
+    var pttype = NaN;
+    if (req.body.sub_inscl){
+        pttype = req.body.sub_inscl;
+    }
 
     try {
         // hosxp_pcu
@@ -225,7 +229,14 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   set @staff = '${config.hosxp.staff}';
                   set @dep = '${config.hosxp.dep}'; #ห้องตรวจ
                   set @spclty = '${config.hosxp.spclty}'; #แผนก
-                  set @ovstlist = '01'; #มาเอง                
+                  set @ovstlist = '01'; #มาเอง   
+                  set @pttype_pt = (select if('${patient.pttype}'='null','','${patient.pttype}'));
+                  set @pttype = (select if ('${req.body.sub_inscl}'='null',@pttype_pt,'${req.body.sub_inscl}'));
+                  set @pttypeno = (select if('${patient.pttype_no}'='null','${patient.cid}','${patient.pttype_no}'));
+                  set @hospmain = (select if('${patient.pttype_hospmain}'='null','','${patient.pttype_hospmain}'));
+                  set @hospsub = (select if('${patient.pttype_hospsub}'='null','','${patient.pttype_hospsub}'));
+                  set @pcode =  (SELECT pcode from pttype WHERE pttype = @pttype);
+                  set @hcode = (SELECT hospitalcode from opdconfig LIMIT 1); 
         
                   set @visit_date = (select CURRENT_DATE);
                   set @visit_time = (select CURRENT_TIME);
@@ -241,12 +252,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   set @age_d = null;
                   set @aid = '${patient.chwpart}${patient.amppart}${patient.tmbpart}'; # รหัสจังหวัด อำเภอ ตำบล
                   set @moopart = '${patient.moopart}'; # หมู่ที่
-                  set @pttype = (select if('${patient.pttype}'='null','','${patient.pttype}'));
-                  set @pttypeno = (select if('${patient.pttype_no}'='null','','${patient.pttype_no}'));
-                  set @hospmain = (select if('${patient.pttype_hospmain}'='null','','${patient.pttype_hospmain}'));
-                  set @hospsub = (select if('${patient.pttype_hospsub}'='null','','${patient.pttype_hospsub}'));
-                  set @pcode =  (SELECT pcode from pttype WHERE pttype = @pttype);
-                  set @hcode = (SELECT hospitalcode from opdconfig LIMIT 1); 
+                  
                   set @vstdate = @visit_date;
                   set @vsttime = @visit_time;
                   set @guid1 = (select upper('{${uuid.v4()}}'));
@@ -293,7 +299,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   VALUES (@vn, @pttype, @staff, @hospmain, @hospsub, @pttype_no , NOW(),@claim_type,@claim_code,@claim_code);
         
         `
-
+        console.dir(sql)
         await knex.raw(sql)
 
         console.log({ 'visit': 'success', 'vn': vn })
