@@ -13,5 +13,13 @@
     },
     "api": {
         "port": 3000
+    },
+    "hosxp":{
+        "doctor":"0001",
+        "staff":"001",
+        "dep":"019",
+        "spclty":"01",
+        "icode_out_time":"3000002",
+        "icode_in_time":"3001647"
     }
 }

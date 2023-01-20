@@ -173,7 +173,7 @@ SELECT @weight as weight ,@height as height ,@pressure as pressure,@respri as re
 
 router.post('/visit_hosxp', async (req, res, next) => {
 
-    console.log('visit_hosxp',req.body)
+    console.log('visit_hosxp', req.body)
     //res.status(200).json({ 'visit': 'test', 'vn': '0000'});
     //return;
     cid = req.body.cid;
@@ -221,10 +221,10 @@ router.post('/visit_hosxp', async (req, res, next) => {
         // hosxp_pcu
 
         sql = `  
-                  set @doctor = '0001';
-                  set @staff = '001';
-                  set @dep = '019'; #ห้องตรวจ
-                  set @spclty = '01'; #แผนก
+                  set @doctor = '${config.hosxp.doctor}';
+                  set @staff = '${config.hosxp.staff}';
+                  set @dep = '${config.hosxp.dep}'; #ห้องตรวจ
+                  set @spclty = '${config.hosxp.spclty}'; #แผนก
                   set @ovstlist = '01'; #มาเอง
                  
 
@@ -284,7 +284,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   VALUES (@guid2,@vn,@hn,@vstdate,@vsttime,@bw,@height,@waist,@bps,@bpd,@pulse,@temperature,@cc);
                   
 
-                  set @icode :=  (SELECT IF(@visit_type = 'O' ,'3000002','3001647'));
+                  set @icode :=  (SELECT IF(@visit_type = 'O' ,'${config.hosxp.icode_out_time}','${config.hosxp.icode_in_time}'));
                   set @price :=  (select price from nondrugitems where icode = @icode);
 
                   INSERT INTO opitemrece (hos_guid,vn,hn,icode,qty,unitprice,vstdate,vsttime,staff,item_no,last_modified,sum_price) 
