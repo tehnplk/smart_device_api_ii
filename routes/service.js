@@ -216,9 +216,18 @@ router.post('/visit_hosxp', async (req, res, next) => {
     y = y.slice(2)
     n = moment().format("MMDDHHmmss")
     vn = y + n;
+
     var req_pttype = '';
+    var req_hospmain = '';
+    var req_hospsub = '';
     if (req.body.sub_inscl) {
         req_pttype = req.body.sub_inscl;
+    }
+    if (req.body.hospmain) {
+        req_hospmain = req.body.hospmain;
+    }
+    if (req.body.hospsub) {
+        req_hospsub = req.body.hospsub;
     }
 
     try {
@@ -233,8 +242,10 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   set @pttype_pt = (select if('${patient.pttype}'='null','','${patient.pttype}'));
                   set @pttype = (select if ('${req_pttype}'='',@pttype_pt,'${req_pttype}'));
                   set @pttypeno = (select if('${patient.pttype_no}'='null','${patient.cid}','${patient.pttype_no}'));
-                  set @hospmain = (select if('${patient.pttype_hospmain}'='null','','${patient.pttype_hospmain}'));
-                  set @hospsub = (select if('${patient.pttype_hospsub}'='null','','${patient.pttype_hospsub}'));
+                  set @hospmain_pt = (select if('${patient.pttype_hospmain}'='null','','${patient.pttype_hospmain}'));
+                  set @hospmain = (select if ('${req_hospmain}'='',@hospmain_pt,'${req_hospmain}'));
+                  set @hospsub_pt = (select if('${patient.pttype_hospsub}'='null','','${patient.pttype_hospsub}'));
+                  set @hospsub = (select if ('${req_hospsub}'='',@hospsub_pt,'${req_hospsub}'));
                   set @pcode =  (SELECT pcode from pttype WHERE pttype = @pttype);
                   set @hcode = (SELECT hospitalcode from opdconfig LIMIT 1); 
         
