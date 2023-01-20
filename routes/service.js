@@ -216,7 +216,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
     y = y.slice(2)
     n = moment().format("MMDDHHmmss")
     vn = y + n;
-    var req_pttype = NaN;
+    var req_pttype = '';
     if (req.body.sub_inscl) {
         req_pttype = req.body.sub_inscl;
     }
@@ -231,7 +231,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   set @spclty = '${config.hosxp.spclty}'; #แผนก
                   set @ovstlist = '01'; #มาเอง   
                   set @pttype_pt = (select if('${patient.pttype}'='null','','${patient.pttype}'));
-                  set @pttype = (select if ('${req_pttype}'='NaN',@pttype_pt,'${req_pttype}'));
+                  set @pttype = (select if ('${req_pttype}'='',@pttype_pt,'${req_pttype}'));
                   set @pttypeno = (select if('${patient.pttype_no}'='null','${patient.cid}','${patient.pttype_no}'));
                   set @hospmain = (select if('${patient.pttype_hospmain}'='null','','${patient.pttype_hospmain}'));
                   set @hospsub = (select if('${patient.pttype_hospsub}'='null','','${patient.pttype_hospsub}'));
