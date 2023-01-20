@@ -225,9 +225,7 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   set @staff = '${config.hosxp.staff}';
                   set @dep = '${config.hosxp.dep}'; #ห้องตรวจ
                   set @spclty = '${config.hosxp.spclty}'; #แผนก
-                  set @ovstlist = '01'; #มาเอง
-                 
-
+                  set @ovstlist = '01'; #มาเอง                
         
                   set @visit_date = (select CURRENT_DATE);
                   set @visit_time = (select CURRENT_TIME);
@@ -238,9 +236,9 @@ router.post('/visit_hosxp', async (req, res, next) => {
                   set @cc = @claim_code;
                   set @hn = '${patient.hn}';
                   set @sex = '${patient.sex}';
-                  set @age_y = '11';
-                  set @age_m = '10';
-                  set @age_d = '9';
+                  set @age_y = null;
+                  set @age_m = null;
+                  set @age_d = null;
                   set @aid = '${patient.chwpart}${patient.amppart}${patient.tmbpart}'; # รหัสจังหวัด อำเภอ ตำบล
                   set @moopart = '${patient.moopart}'; # หมู่ที่
                   set @pttype = (select if('${patient.pttype}'='null','','${patient.pttype}'));
