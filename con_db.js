@@ -20,7 +20,9 @@ Connection_string = {
             conn.query("SET NAMES UTF8", err => {
                 done(err, conn);
             });
-        }
+        },
+        min: 0,
+        max: 7
     }
 }
 if (config.db.client == 'pg') {
