@@ -12,34 +12,37 @@ router.post('/post_data_bmi', async function (req, res, next) {
     console.log(data)
 
     if (config.his == 'hosxp') {
-        r = await knex('opdscreen')
-            .where('vn', '=', data.vn)
-            .update({
-                bw: data.data.bw,
-                height: Math.ceil(data.data.bh),
-                bmi: data.data.bmi
-            })
-        console.log(r)
-        await knex.raw(`
-        COMMIT;
-        UNLOCK TABLES;
-
-        `)
-        res.json(r)
+        try {
+            r = await knex('opdscreen')
+                .where('vn', '=', data.vn)
+                .update({
+                    bw: data.data.bw,
+                    height: Math.ceil(data.data.bh),
+                    bmi: data.data.bmi
+                })
+            res.json(r)
+        } catch (error) {
+            res.json(error)
+        }
 
     }
 
 
 
     if (config.his == 'jhcis') {
-        r = await knex('visit')
-            .where('visitno', '=', data.vn)
-            .update({
-                weight: data.data.bw,
-                height: Math.ceil(data.data.bh),
-            })
-        console.log(r)
-        res.json(r)
+        try {
+            r = await knex('visit')
+                .where('visitno', '=', data.vn)
+                .update({
+                    weight: data.data.bw,
+                    height: Math.ceil(data.data.bh),
+                })
+            console.log(r)
+            res.json(r)
+        } catch (error) {
+            res.json(error)
+        }
+
     }
 
 });
@@ -60,16 +63,26 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
         'bh': Math.ceil(data.data.bh),
         'bmi': data.data.bmi
     };
-    r = await knex('smart_gate_bmi').insert(raw)
-    res.json(r)
+    try {
+        r = await knex('smart_gate_bmi').insert(raw)
+        res.json(r)
+    } catch (error) {
+        res.json(error)
+    }
+
 
 });
 
 router.post('/post_data_bmi_log2', async function (req, res, next) {
     data = req.body
     console.log(data)
-    r = await knex('smart_gate_bmi').insert(data)
-    res.json(r)
+    try {
+        r = await knex('smart_gate_bmi').insert(data)
+        res.json(r)
+    } catch (error) {
+        res.json(error)
+    }
+
 
 });
 

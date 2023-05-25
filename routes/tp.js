@@ -9,37 +9,47 @@ router.post('/post_data_tp', async function (req, res, next) {
     data = req.body
     var _now = moment().format('YYYY-MM-DD HH:mm:ss')
     console.log(_now + 'post_data_tp')
-    console.log('post data',data)
+    console.log('post data', data)
     if (config.his == 'hosxp') {
-        r = await knex('opdscreen')
-            .where('vn', '=', data.vn)
-            .update({
-                temperature: data.data.tp
-            })
-        res.json(r)
+        try {
+            r = await knex('opdscreen')
+                .where('vn', '=', data.vn)
+                .update({
+                    temperature: data.data.tp
+                })
+            res.json(r)
+        } catch (error) {
+            res.json(error)
+        }
+
     }
 
 
     if (config.his == 'jhcis') {
-        r = await knex('visit')
-            .where('visitno', '=', data.vn)
-            .update({
-                temperature: data.data.tp
-            })
-        res.json(r)
+        try {
+            r = await knex('visit')
+                .where('visitno', '=', data.vn)
+                .update({
+                    temperature: data.data.tp
+                })
+            res.json(r)
+        } catch (error) {
+            res.json(error)
+        }
+
     }
 
     if (config.his == 'him') {
-		console.log('Him',req.body)
-		raw = req.body
+        console.log('Him', req.body)
+        raw = req.body
         let vn = raw.vn;
         let temperature = raw.data.tp
 
         console.log('POST TP DATA = ', vn, temperature);
-		if(!vn){
-			res.json({'vn':''})
-			return false;
-		}
+        if (!vn) {
+            res.json({ 'vn': '' })
+            return false;
+        }
 
         let p = vn.split('|');
         if (p.length != 3) {
@@ -53,16 +63,21 @@ router.post('/post_data_tp', async function (req, res, next) {
         let regdate = p[1];
         let frequency = p[2];
 
-        r = await knex('opd')
-            .where({
-                'hn': hn,
-                'regdate': regdate,
-                'frequency': frequency
-            })
-            .update({
-                temper: temperature,
-            })
-        res.json(r)
+        try {
+            r = await knex('opd')
+                .where({
+                    'hn': hn,
+                    'regdate': regdate,
+                    'frequency': frequency
+                })
+                .update({
+                    temper: temperature,
+                })
+            res.json(r)
+        } catch (error) {
+            res.json(error)
+        }
+
     }
 
 
@@ -82,8 +97,13 @@ router.post('/post_data_tp_log', async function (req, res, next) {
         'note3': data.data.machine,
         'tp': data.data.tp,
     };
-    r = await knex('smart_gate_tp').insert(raw)
-    res.json(r)
+    try {
+        r = await knex('smart_gate_tp').insert(raw)
+        res.json(r)
+    } catch (error) {
+        res.json(error)
+    }
+   
 });
 
 

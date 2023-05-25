@@ -5,7 +5,7 @@
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",
-        "host": "localhost",
+        "host": "localhosttt",
         "port": 3306,
         "user": "root",
         "password": "112233",

@@ -11,32 +11,44 @@ router.post('/post_data_bp', async function (req, res, next) {
     console.log(_now + 'post_data_bp')
     console.log(data)
     if (config.his == 'hosxp') {
-        r = await knex('opdscreen')
-            .where('vn', '=', data.vn)
-            .update({
-                //temperature: data.data.tp,
-                bps: data.data.bps,
-                bpd: data.data.bpd,
-                pulse: data.data.pulse
-            })
-        res.json(r)
+        try {
+            r = await knex('opdscreen')
+                .where('vn', '=', data.vn)
+                .update({
+                    //temperature: data.data.tp,
+                    bps: data.data.bps,
+                    bpd: data.data.bpd,
+                    pulse: data.data.pulse
+                })
+            res.json(r)
+
+        } catch (error) {
+            res.json(error)
+        }
+
+
     }
 
     if (config.his == 'jhcis') {
-        r = await knex('visit')
-            .where('visitno', '=', data.vn)
-            .update({
-                //temperature: data.data.tp,
-                pressure: data.data.bps + '/' + data.data.bpd,
-                pulse: data.data.pulse
-            })
-        res.json(r)
+        try {
+            r = await knex('visit')
+                .where('visitno', '=', data.vn)
+                .update({
+                    //temperature: data.data.tp,
+                    pressure: data.data.bps + '/' + data.data.bpd,
+                    pulse: data.data.pulse
+                })
+            res.json(r)
+        } catch (error) {
+            res.json(error)
+        }
+
     }
 
     if (config.his == 'him') {
 
-        console.log('Him',req.body);
-		raw = req.body
+        console.log('Him', req.body);
+        raw = req.body
 
         let vn = raw.vn;
         let hpressure = raw.data.bps;
@@ -44,11 +56,11 @@ router.post('/post_data_bp', async function (req, res, next) {
         let pulse = raw.data.pulse;
 
         console.log('POST BP DATA = ', vn, hpressure, lpressure, pulse);
-		
-		if(!vn){
-			res.json({'vn':''})
-			return false;
-		}
+
+        if (!vn) {
+            res.json({ 'vn': '' })
+            return false;
+        }
 
         let p = vn.split('|');
         if (p.length != 3) {
@@ -62,18 +74,23 @@ router.post('/post_data_bp', async function (req, res, next) {
         let regdate = p[1];
         let frequency = p[2];
 
-        r = await knex('opd')
-            .where({
-                'hn': hn,
-                'regdate': regdate,
-                'frequency': frequency
-            })
-            .update({
-                hpressure: hpressure,
-                lpressure: lpressure,
-                pulse: pulse
-            })
-        res.json(r)
+        try {
+            r = await knex('opd')
+                .where({
+                    'hn': hn,
+                    'regdate': regdate,
+                    'frequency': frequency
+                })
+                .update({
+                    hpressure: hpressure,
+                    lpressure: lpressure,
+                    pulse: pulse
+                })
+            res.json(r)
+        } catch (error) {
+            res.json(error)
+        }
+
     }
 
 
@@ -155,8 +172,15 @@ router.post('/post_data_bp_log', async function (req, res, next) {
         'bpd': data.data.bpd,
         'pulse': data.data.pulse
     };
-    r = await knex('smart_gate_bp').insert(raw)
-    res.json(r)
+    try {
+        r = await knex('smart_gate_bp').insert(raw)
+        res.json(r)
+    } catch (error) {
+        res.json(error)
+    }
+    
+
+
 
 });
 

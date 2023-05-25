@@ -17,7 +17,7 @@ router.get('/test', async function (req, res, next) {
     sql = "select visitno as vn ,pid as hn , visitdate as vstdate,timestart as vsttime from visit order by visitno DESC limit 1"
   }
 
-  if (config.his == 'him'){
+  if (config.his == 'him') {
     sql = `select  concat(hn,'|',regdate,'|',frequency) as vn
     , hn
     ,regdate as vstdate
@@ -26,7 +26,13 @@ router.get('/test', async function (req, res, next) {
     where regdate = CURRENT_DATE order by timereg desc limit 1`
   }
 
-  r = await knex.raw(sql)
+  try {
+    r = await knex.raw(sql)
+  } catch (error) {
+    res.json(error)
+    return false
+  }
+
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;
@@ -57,14 +63,19 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
     where p.idcard = '${cid}' limit 1`
   }
 
-  if(config.his == 'him'){
+  if (config.his == 'him') {
     sql = `select hn,REPLACE(cardid,'-','') as cid,fullname,null sex
     ,concat(hn,'|',regdate,'|',frequency) as vn
     ,null as birth  from opd where  REPLACE(cardid,'-','') = '${cid}' 
     and regdate = CURRENT_DATE order by timereg desc limit 1`
-}
+  }
 
-  r = await knex.raw(sql)
+  try {
+    r = await knex.raw(sql)
+  } catch (error) {
+    res.json(error)
+    return false
+  }
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;
@@ -98,15 +109,20 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     from person p  left join ctitle c on c.titlecode = p.prename
     where p.pid = '${hn}' limit 1`
   }
-  
-  if(config.his == 'him'){
+
+  if (config.his == 'him') {
     sql = `select hn,REPLACE(cardid,'-','') as cid,fullname,null sex
     ,concat(hn,'|',regdate,'|',frequency) as vn
     ,null as birth  from opd where  hn = '${hn}' 
     and regdate = CURRENT_DATE order by timereg desc limit 1`
-}
+  }
 
-  r = await knex.raw(sql)
+  try {
+    r = await knex.raw(sql)
+  } catch (error) {
+    res.json(error)
+    return false
+  }
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;
@@ -116,7 +132,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     res.json(data_none)
     return false
   }
-  
+
   data = {
     'hn': r[0][0].hn,
     'cid': r[0][0].cid,
@@ -142,7 +158,12 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
     where v.visitno = '${vn}'`
   }
 
-  r = await knex.raw(sql)
+  try {
+    r = await knex.raw(sql)
+  } catch (error) {
+    res.json(error)
+    return false
+  }
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;
@@ -177,7 +198,12 @@ router.get('/get_today_visit_by_cid/:cid', async function (req, res, next) {
     `
   }
 
-  r = await knex.raw(sql)
+  try {
+    r = await knex.raw(sql)
+  } catch (error) {
+    res.json(error)
+    return false
+  }
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;
@@ -212,10 +238,13 @@ router.get('/get_today_visit_by_hn/:hn', async function (req, res, next) {
     `
   }
 
-  r = await knex.raw(sql)
-
-
-
+  try {
+    r = await knex.raw(sql)
+  } catch (error) {
+    res.json(error)
+    return false
+  }
+  
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;

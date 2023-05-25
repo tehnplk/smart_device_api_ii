@@ -12,7 +12,7 @@ Connection_string = {
         password: config.db.password,
         database: config.db.database,
         timezone: 'utc',
-        requestTimeout: 30000,
+        requestTimeout: 1000,
         multipleStatements: true
     },
     pool: {
