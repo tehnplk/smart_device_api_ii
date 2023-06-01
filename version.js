@@ -1,3 +1,3 @@
 exports.version = function () {
-  return "II-3.0.9 (2023-05-25)";
+  return "II-3.1.1 (2023-06-01)(BMSGW Support)";
 };
