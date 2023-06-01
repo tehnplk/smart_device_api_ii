@@ -23,7 +23,7 @@ router.post('/post_data_tp', async function (req, res, next) {
 
 
             raw_data = {
-                'scn_result_receive_status': 'C',
+                'scn_result_receive_status': 'N',
                 'scn_result_stamp_datetime': _now,
                 'scn_result_receive_datetime': _now,
                 'scn_result_data': hl7,
