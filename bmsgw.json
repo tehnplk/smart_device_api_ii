@@ -1,6 +1,6 @@
 {
     
-    "active":true,
+    "active":false,
     "company":"ANT",
     "db": {
         "client_support": "mysql | pg",
