@@ -55,6 +55,10 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
   sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth'
   ,(select vn from vn_stat where vstdate = CURRENT_DATE  and cid = '${cid}' order by vn DESC limit 1) vn 
   from patient where cid = '${cid}' limit 1`
+  if(config.hosxp_patient_view){
+    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth',vn
+  from patientinfo where cid = '${cid}' limit 1`
+  }
 
   if (config.his == 'jhcis') {
     sql = `select p.pid as hn,idcard as cid,concat(c.titlename,p.fname,' ',p.lname) as fullname,p.sex as sex,birth
@@ -103,6 +107,11 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   ,(select vn from vn_stat where vstdate = CURRENT_DATE  and hn = '${hn}' order by vn DESC limit 1) vn 
   from patient where hn = '${hn}' limit 1`
 
+  if(config.hosxp_patient_view){
+    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth',vn
+  from patientinfo where hn = '${hn}' limit 1`
+  }
+
   if (config.his == 'jhcis') {
     sql = `select p.pid as hn,idcard as cid,concat(c.titlename,p.fname,' ',p.lname) as fullname,p.sex as sex,birth
     , (select visitno from visit v  where v.visitdate = CURRENT_DATE and v.pid = '${hn}' order by v.visitno DESC limit 1 ) as vn
@@ -149,6 +158,11 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
   sql = `SELECT t.hn,p.cid,concat(p.pname,p.fname,' ',p.lname) fullname,p.sex,p.birthday 'birth',t.vn 
   from ovst t INNER JOIN patient p ON t.hn = p.hn
   WHERE t.vn = '${vn}'`
+
+  if(config.hosxp_patient_view){
+    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth',vn
+  from patientinfo where vn = '${vn}' limit 1`
+  }
 
   if (config.his == 'jhcis') {
     sql = `select v.pid as hn,p.idcard as cid,concat(c.titlename,p.fname,' ',p.lname) as fullname
