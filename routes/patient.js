@@ -13,6 +13,11 @@ data_none = {
 }
 router.get('/test', async function (req, res, next) {
   sql = "select vn , hn , vstdate,vsttime from ovst order by vn DESC limit 1"
+
+  if(config.hosxp_patient_view){
+    sql = "select * from patientinfo order by vn DESC limit 1"
+  }
+
   if (config.his == 'jhcis') {
     sql = "select visitno as vn ,pid as hn , visitdate as vstdate,timestart as vsttime from visit order by visitno DESC limit 1"
   }
