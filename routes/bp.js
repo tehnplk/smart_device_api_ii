@@ -12,6 +12,11 @@ router.post('/post_data_bp', async function (req, res, next) {
     var _now = moment().format('YYYYMMDDHHmmss')
     console.log(_now + 'post_data_bp')
     console.log(data)
+    if (config.not_post_if_null_pt & !data.hn) {
+        console.log({ 'hn': 'no hn', 'data': data.data })
+        res.json({ 'hn': 'no hn', 'data': data.data })
+        return;
+    }
 
     if (bmsgw.active) {
 

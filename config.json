@@ -2,6 +2,7 @@
     "hoscode": "07480",
     "his_support": "hosxp|jhcis|him",
     "his": "hosxp",
+    "not_post_if_null_pt":true,
     "hosxp_patient_view":true,
     "db": {
         "client_support": "mysql | pg",

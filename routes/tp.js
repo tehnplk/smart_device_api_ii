@@ -4,7 +4,8 @@ var knex = require('../con_db')
 var moment = require('moment')
 var config = require('../config.json')
 var bmsgw = require('../bmsgw.json')
-var knex_gw = require('../con_db_bmsgw')
+var knex_gw = require('../con_db_bmsgw');
+const { is } = require('express/lib/request');
 
 
 router.post('/post_data_tp', async function (req, res, next) {
@@ -12,6 +13,11 @@ router.post('/post_data_tp', async function (req, res, next) {
     var _now = moment().format('YYYYMMDDHHmmss')
     console.log(_now + 'post_data_tp')
     console.log('post data', data)
+    if (config.not_post_if_null_pt & !data.hn) {
+        console.log({ 'hn': 'no hn', 'data': data.data })
+        res.json({ 'hn': 'no hn', 'data': data.data })
+        return;
+    }
 
     if (bmsgw.active) {
         try {
