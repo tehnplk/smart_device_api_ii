@@ -9,6 +9,12 @@ var knex_gw = require('../con_db_bmsgw')
 
 router.post('/post_data_bp', async function (req, res, next) {
     data = req.body
+    console.log(data)
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
     var _now = moment().format('YYYYMMDDHHmmss')
     console.log(_now + 'post_data_bp')
     console.log(data)
@@ -141,6 +147,12 @@ router.post('/post_data_bp', async function (req, res, next) {
 router.post('/post_data_bp_list', async function (req, res, next) {
     data = req.body
     console.log(data)
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
+    
     let vn = data.vn;
     let temperature = data.data.tp;
     let bps = data.data.bps;
@@ -198,6 +210,12 @@ router.post('/post_data_bp_list', async function (req, res, next) {
 router.post('/post_data_bp_log', async function (req, res, next) {
     data = req.body
     console.log(data)
+
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
     raw = {
         'vn': data.vn,
         'cid': data.cid,

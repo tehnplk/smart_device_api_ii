@@ -10,6 +10,13 @@ const { is } = require('express/lib/request');
 
 router.post('/post_data_tp', async function (req, res, next) {
     data = req.body
+    console.log(data)
+
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
     var _now = moment().format('YYYYMMDDHHmmss')
     console.log(_now + 'post_data_tp')
     console.log('post data', data)
@@ -125,6 +132,13 @@ router.post('/post_data_tp', async function (req, res, next) {
 router.post('/post_data_tp_log', async function (req, res, next) {
     data = req.body
     console.log(data)
+
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
+    
     raw = {
         'vn': data.vn,
         'cid': data.cid,

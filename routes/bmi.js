@@ -10,6 +10,12 @@ var knex_gw = require('../con_db_bmsgw')
 
 router.post('/post_data_bmi', async function (req, res, next) {
     data = req.body
+    console.log(data)
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
     var _now = moment().format('YYYYMMDDHHmmss')
     console.log(_now + 'post_data_bmi')
     console.log(data)
@@ -31,9 +37,9 @@ router.post('/post_data_bmi', async function (req, res, next) {
 
 
             raw_data = {
-                'scn_result_receive_status':'N',
-                'scn_result_stamp_datetime':_now,
-                'scn_result_receive_datetime':_now,
+                'scn_result_receive_status': 'N',
+                'scn_result_stamp_datetime': _now,
+                'scn_result_receive_datetime': _now,
                 'scn_result_data': hl7,
                 'scn_result_no': data.hn,
                 'scn_identify_patient_type': 'hn',
@@ -91,6 +97,12 @@ router.post('/post_data_bmi', async function (req, res, next) {
 router.post('/post_data_bmi_log', async function (req, res, next) {
     data = req.body
     console.log(data)
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
+    
     raw = {
         'vn': data.vn,
         'cid': data.cid,
@@ -117,6 +129,12 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
 router.post('/post_data_bmi_log2', async function (req, res, next) {
     data = req.body
     console.log(data)
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
+    
     try {
         r = await knex('smart_gate_bmi').insert(data)
         res.json(r)
