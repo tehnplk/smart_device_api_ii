@@ -5,6 +5,7 @@
     "his": "hosxp",
     "not_post_if_null_pt":true,
     "hosxp_patient_view":true,
+    "token":"xxxxxxx",
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",
