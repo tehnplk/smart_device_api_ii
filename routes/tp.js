@@ -159,8 +159,6 @@ router.post('/post_data_tp_log', async function (req, res, next) {
         return false
     }
 
-
-
     raw = {
         'vn': data.vn,
         'cid': data.cid,
