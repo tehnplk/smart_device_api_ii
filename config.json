@@ -1,11 +1,10 @@
 {
-    "mode_test":true,
+    "mode_test": true,
     "hoscode": "07480",
     "his_support": "hosxp|jhcis|him",
     "his": "hosxp",
-    "not_post_if_null_pt":true,
-    "hosxp_patient_view":true,
-    "token":"xxxxxxx",
+    "not_post_if_null_pt": true,
+    "hosxp_patient_view": true,
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",
@@ -18,15 +17,15 @@
     "api": {
         "port": 3000
     },
-    "hosxp":{
-        "doctor":"0001",
-        "staff":"001",
-        "dep":"019",
-        "spclty":"01",
-        "icode_out_time":"3000002",
-        "icode_in_time":"3001647"
+    "hosxp": {
+        "doctor": "0001",
+        "staff": "001",
+        "dep": "019",
+        "spclty": "01",
+        "icode_out_time": "3000002",
+        "icode_in_time": "3001647"
     },
-    "jhcis":{
-        "user":"chaow"
+    "jhcis": {
+        "user": "chaow"
     }
 }

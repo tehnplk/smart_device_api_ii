@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const axios = require('axios');
-var config = require('../config.json')
-token = "xxxxxxxx"
+var token = "2452cac74071f1d643f636358527354628cf2ca187121f36b43ff62b0ffda149f3938328d5ad5ae7d155e40df9ff4c5f9e224a51376e377a6d698c97aab84697"
 
 router.get('/send', async function (req, res, next) {
 
