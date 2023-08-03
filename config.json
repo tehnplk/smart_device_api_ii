@@ -1,10 +1,12 @@
 {
-    "mode_test": true,
-    "hoscode": "07480",
-    "his_support": "hosxp|jhcis|him",
-    "his": "hosxp",
+    "mode_test": false,
+    "hoscode": "00000",
+    "his_support": "hosxp|jhcis|him|ihealth",
+    "his": "ihealth",
     "not_post_if_null_pt": true,
     "hosxp_patient_view": true,
+    "ihealth_api":"xxx",
+    "ihealth_token":"xxxx",
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",

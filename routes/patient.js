@@ -12,13 +12,19 @@ data_none = {
   'birth': '1800-01-01'
 }
 router.get('/test', async function (req, res, next) {
-  if (config.mode_test){
-    res.json({'mode_test':true})
+  if (config.mode_test) {
+    res.json({ 'mode_test': true })
     return false
   }
+
+  if (config.his == 'ihealth') {
+    res.json({ 'his': 'ihealth' })
+    return false
+  }
+
   sql = "select vn , hn , vstdate,vsttime from ovst order by vn DESC limit 1"
 
-  if(config.hosxp_patient_view){
+  if (config.hosxp_patient_view) {
     sql = "select * from patientinfo order by vn DESC limit 1"
   }
 
@@ -62,7 +68,7 @@ router.get('/test', async function (req, res, next) {
 router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
   cid = req.params.cid
 
-  if (config.mode_test){
+  if (config.mode_test) {
     data = {
       'hn': '111111111',
       'cid': cid,
@@ -75,10 +81,24 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
     return false
   }
 
+  if (config.his == 'ihealth') {
+    data = {
+      'hn': cid,
+      'cid': cid,
+      'fullname': cid,
+      'sex': 1,
+      'vn': "",
+      'birth': '1980-04-18'
+    }
+    res.json(data)
+    return false
+  }
+
+
   sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth'
   ,(select vn from vn_stat where vstdate = CURRENT_DATE  and cid = '${cid}' order by vn DESC limit 1) vn 
   from patient where cid = '${cid}' limit 1`
-  if(config.hosxp_patient_view){
+  if (config.hosxp_patient_view) {
     sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth',vn
   from patientinfo where cid = '${cid}' limit 1`
   }
@@ -127,7 +147,7 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
 router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   hn = req.params.hn
 
-  if (config.mode_test){
+  if (config.mode_test) {
     data = {
       'hn': hn,
       'cid': '1111111111111',
@@ -140,11 +160,25 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     return false
   }
 
+  if (config.his == 'ihealth') {
+    data = {
+      'hn': hn,
+      'cid': "",
+      'fullname': hn,
+      'sex': 1,
+      'vn': "",
+      'birth': '1980-04-18'
+    }
+    res.json(data)
+    return false
+  }
+
+
   sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth'
   ,(select vn from vn_stat where vstdate = CURRENT_DATE  and hn = '${hn}' order by vn DESC limit 1) vn 
   from patient where hn = '${hn}' limit 1`
 
-  if(config.hosxp_patient_view){
+  if (config.hosxp_patient_view) {
     sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth',vn
   from patientinfo where hn = '${hn}' limit 1`
   }
@@ -193,7 +227,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
 router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
   vn = req.params.vn
 
-  if (config.mode_test){
+  if (config.mode_test) {
     data = {
       'hn': '111111111',
       'cid': '1111111111111',
@@ -206,11 +240,24 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
     return false
   }
 
+  if (config.his == 'ihealth') {
+    data = {
+      'hn': vn,
+      'cid': "",
+      'fullname': vn,
+      'sex': 1,
+      'vn': vn,
+      'birth': '1980-04-18'
+    }
+    res.json(data)
+    return false
+  }
+
   sql = `SELECT t.hn,p.cid,concat(p.pname,p.fname,' ',p.lname) fullname,p.sex,p.birthday 'birth',t.vn 
   from ovst t INNER JOIN patient p ON t.hn = p.hn
   WHERE t.vn = '${vn}'`
 
-  if(config.hosxp_patient_view){
+  if (config.hosxp_patient_view) {
     sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday 'birth',vn
   from patientinfo where vn = '${vn}' limit 1`
   }
@@ -309,7 +356,7 @@ router.get('/get_today_visit_by_hn/:hn', async function (req, res, next) {
     res.json(error)
     return false
   }
-  
+
 
   if (config.db.client == 'pg') {
     r[0] = r.rows;

@@ -6,7 +6,7 @@ var config = require('../config.json')
 var bmsgw = require('../bmsgw.json')
 var knex_gw = require('../con_db_bmsgw');
 const { is } = require('express/lib/request');
-
+const axios = require('axios');
 
 router.post('/post_data_tp', async function (req, res, next) {
     data = req.body
@@ -14,6 +14,22 @@ router.post('/post_data_tp', async function (req, res, next) {
 
     if (config.mode_test) {
         res.json(data)
+        return false
+    }
+
+    if (config.his == 'ihealth') {
+        body_data = {
+            "cid": data.cid,
+            "vn": data.vn,
+            "device_data": { temp: data.data.tp }
+        }
+        n = await axios.post(`${config.ihealth_api}`, body_data, {
+            headers: {
+                'Authorization': `${config.ihealth_token}`
+            }
+        })
+        console.log("iHealth Response ", n.status)
+        res.json(n.status, data)
         return false
     }
 
@@ -138,7 +154,13 @@ router.post('/post_data_tp_log', async function (req, res, next) {
         return false
     }
 
-    
+    if (config.his == 'ihealth') {
+        res.json(data)
+        return false
+    }
+
+
+
     raw = {
         'vn': data.vn,
         'cid': data.cid,
