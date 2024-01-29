@@ -40,6 +40,10 @@ router.post('/post_data_bmi', async function (req, res, next) {
         res.json({ 'hn': 'no hn', 'data': data.data })
         return;
     }
+    if (config.his == '้him') {
+        res.json({'resp':'try add to him.'})
+        retu
+    }
 
     if (bmsgw.active) {
         try {
@@ -103,6 +107,54 @@ router.post('/post_data_bmi', async function (req, res, next) {
             }
 
         }
+
+        if (config.his == 'him') {            
+
+            console.log('Him', req.body)
+            raw = req.body
+            let vn = raw.vn;
+            let high = raw.data.bh
+            let weight = raw.data.bw
+            let bmi = raw.data.bmi
+
+            console.log('POST BMI DATA = ', vn, high,weight,bmi);
+            if (!vn) {
+                res.json({ 'vn': '' })
+                return false;
+            }
+
+            let p = vn.split('|');
+            if (p.length != 3) {
+                console.log('No hn.')
+                res.json({
+                    'effect': 0
+                })
+                return false;
+            }
+            let hn = p[0];
+            let regdate = p[1];
+            let frequency = p[2];
+
+            try {
+                r = await knex('opd')
+                    .where({
+                        'hn': hn,
+                        'regdate': regdate,
+                        'frequency': frequency
+                    })
+                    .update({
+                        high: high,
+                        weight:weight,
+                        bmi:bmi
+                    })
+                res.json(r)
+            } catch (error) {
+                res.json(error)
+            }
+            return;
+
+        }
+           
 
     }
 
