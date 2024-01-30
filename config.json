@@ -2,7 +2,7 @@
     "mode_test": false,
     "hoscode": "00000",
     "his_support": "hosxp|jhcis|him|ihealth",
-    "his": "hosxp",
+    "his": "him",
     "not_post_if_null_pt": true,
     "hosxp_patient_view": false,
     "ihealth_api":"https://ihealthrawae.net:8080/api/smart/send",
@@ -14,7 +14,7 @@
         "port": 3306,
         "user": "root",
         "password": "112233",
-        "database": "h07479"
+        "database": "opd"
     },
     "api": {
         "port": 3000
