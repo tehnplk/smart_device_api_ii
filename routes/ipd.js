@@ -154,6 +154,8 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
   res.json(data)
 });
 
+
+
 router.post('/post_data', async function (req, res, next) {
   data = req.body
   console.log(data)
@@ -172,7 +174,7 @@ router.post('/post_data', async function (req, res, next) {
   hl7 = hl7 + `OBX|9|ST|HEARTRATE||${data.data.hr}|HRM|||||F|||${_now}\r\n`
   hl7 = hl7 + `OBX|10|ST|SPO2||${data.data.spo}|%Spo2|||||F|||${_now}\r\n`
 
-  console.log(hl7)
+  console.log('hl7', hl7)
 
 
   if (config.mode_test) {
@@ -180,9 +182,6 @@ router.post('/post_data', async function (req, res, next) {
     return false
   }
 
-
-  console.log(_now + 'post_data')
-  console.log(data)
   if (config.not_post_if_null_pt & !data.hn) {
     console.log({ 'hn': 'no hn', 'data': data.data })
     res.json({ 'hn': 'no hn', 'data': data.data })
