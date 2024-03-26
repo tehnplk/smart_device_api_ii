@@ -157,19 +157,8 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
 router.post('/post_data', async function (req, res, next) {
   data = req.body
   console.log(data)
-  if (config.mode_test) {
-    res.json(data)
-    return false
-  }
-
   var _now = moment().format('YYYYMMDDHHmmss')
-  console.log(_now + 'post_data')
-  console.log(data)
-  if (config.not_post_if_null_pt & !data.hn) {
-    console.log({ 'hn': 'no hn', 'data': data.data })
-    res.json({ 'hn': 'no hn', 'data': data.data })
-    return;
-  }
+
 
   let hl7 = `MSH|^~\\&|${data.data.machine}|${bmsgw.company}|HIS|BMS-HOSxP|${_now}||ORU^R01|2701|P|2.3\r\n`
   hl7 = hl7 + `PID|1||${data.hn}|\r\n`
@@ -184,6 +173,23 @@ router.post('/post_data', async function (req, res, next) {
   hl7 = hl7 + `OBX|10|ST|SPO2||${data.data.spo}|%Spo2|||||F|||${_now}\r\n`
 
   console.log(hl7)
+
+
+  if (config.mode_test) {
+    res.json(data)
+    return false
+  }
+
+
+  console.log(_now + 'post_data')
+  console.log(data)
+  if (config.not_post_if_null_pt & !data.hn) {
+    console.log({ 'hn': 'no hn', 'data': data.data })
+    res.json({ 'hn': 'no hn', 'data': data.data })
+    return;
+  }
+
+
 
   raw_data = {
     'scn_result_receive_status': 'N',
@@ -201,7 +207,7 @@ router.post('/post_data', async function (req, res, next) {
     res.json(r)
 
   } catch (error) {
-    console.log(error.errno,error.code)
+    console.log(error.errno, error.code)
     res.json(error)
   }
 
