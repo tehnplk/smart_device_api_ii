@@ -172,13 +172,16 @@ router.post('/post_data', async function (req, res, next) {
   }
 
   let hl7 = `MSH|^~\\&|${data.data.machine}|${bmsgw.company}|HIS|BMS-HOSxP|${_now}||ORU^R01|2701|P|2.3\r\n`
-            hl7 = hl7 + `PID|1||${data.hn}|\r\n`
-            hl7 = hl7 + `PV1||I|||${data.an}||||||||||||||\n`
-            hl7 = hl7 + `OBR|1|||||${_now}||||||||${_now}\r\n`
-            hl7 = hl7 + `OBX|4|ST|TEMP||${data.data.tp}|C|||||F|||${_now}\r\n`
-            hl7 = hl7 + `OBX|5|ST|SYSTOLIC||${data.data.bps}|mmHg|||||F|||${_now}\r\n`
-            hl7 = hl7 + `OBX|6|ST|DIASTOLIC||${data.data.bpd}|mmHg|||||F|||${_now}\r\n`
-            hl7 = hl7 + `OBX|7|ST|PULSE||${data.data.press_pulse}|bpm|||||F|||${_now}\r\n`
+  hl7 = hl7 + `PID|1||${data.hn}|\r\n`
+  hl7 = hl7 + `PV1||I|||${data.an}||||||||||||||\n`
+  hl7 = hl7 + `OBR|1|||||${_now}||||||||${_now}\r\n`
+  hl7 = hl7 + `OBX|4|ST|TEMP||${data.data.tp}|C|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|5|ST|SYSTOLIC||${data.data.bps}|mmHg|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|6|ST|DIASTOLIC||${data.data.bpd}|mmHg|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|7|ST|RR||${data.data.rr}|RM|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|8|ST|PULSE||${data.data.press_pulse}|bpm|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|9|ST|HEARTRATE||${data.data.hr}|HRM|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|10|ST|SPO2||${data.data.spo}|%Spo2|||||F|||${_now}\r\n`
 
   console.log(hl7)
 
@@ -198,6 +201,7 @@ router.post('/post_data', async function (req, res, next) {
     res.json(r)
 
   } catch (error) {
+    console.log(error.errno,error.code)
     res.json(error)
   }
 
