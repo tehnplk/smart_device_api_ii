@@ -195,8 +195,8 @@ router.post('/post_data', async function (req, res, next) {
     'scn_result_stamp_datetime': _now,
     'scn_result_receive_datetime': _now,
     'scn_result_data': hl7,
-    'scn_result_no': data.hn,
-    'scn_identify_patient_type': 'hn',
+    'scn_result_no': data.an,
+    'scn_identify_patient_type': 'an',
     'scn_result_msg_type': 'ORU^R01'
   }
 
