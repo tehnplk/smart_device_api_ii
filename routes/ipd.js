@@ -158,8 +158,8 @@ router.post('/post_data', async function (req, res, next) {
   data = req.body
   console.log(data)
   if (config.mode_test) {
-    //res.json(data)
-    //return false
+    res.json(data)
+    return false
   }
 
   var _now = moment().format('YYYYMMDDHHmmss')
@@ -167,8 +167,8 @@ router.post('/post_data', async function (req, res, next) {
   console.log(data)
   if (config.not_post_if_null_pt & !data.hn) {
     console.log({ 'hn': 'no hn', 'data': data.data })
-    //res.json({ 'hn': 'no hn', 'data': data.data })
-    //return;
+    res.json({ 'hn': 'no hn', 'data': data.data })
+    return;
   }
 
   let hl7 = `MSH|^~\\&|${data.data.machine}|${bmsgw.company}|HIS|BMS-HOSxP|${_now}||ORU^R01|2701|P|2.3\r\n`
