@@ -11,6 +11,12 @@ router.post('/post_data_sp', async function (req, res, next) {
     var _now = moment().format('YYYY-MM-DD HH:mm:ss')
     console.log(_now + 'post_data_sp')
     console.log(data)
+
+    if (config.mode_test) {
+        res.json(data)
+        return false
+    }
+
     r = await knex('opdscreen')
         .where('vn', '=', data.vn)
         .update({

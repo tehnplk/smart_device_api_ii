@@ -1,8 +1,8 @@
 {
-    "mode_test": false,
+    "mode_test": true,
     "hoscode": "00000",
     "his_support": "hosxp|jhcis|him|ihealth",
-    "his": "jhcis",
+    "his": "ihealth",
     "not_post_if_null_pt": true,
     "hosxp_patient_view": false,
     "ihealth_api":"https://ihealthrawae.net:8080/api/smart/send",

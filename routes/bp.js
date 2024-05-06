@@ -22,13 +22,19 @@ router.post('/post_data_bp', async function (req, res, next) {
             "vn": data.vn,
             "device_data": { bps: data.data.bps, bpd: data.data.bpd, pulse: data.data.pulse, temp: data.data.tp }
         }
-        n = await axios.post(`${config.ihealth_api}`, body_data, {
-            headers: {
-                'Authorization': `${config.ihealth_token}`
-            }
-        })
-        console.log("iHealth Response ", n.status)
-        res.json(n.status, data)
+        try {
+            n = await axios.post(`${config.ihealth_api}`, body_data, {
+                headers: {
+                    'Authorization': `${config.ihealth_token}`
+                }
+            })
+            console.log("iHealth Response ", n.status)
+            res.json(n.status, data)
+            
+        } catch (error) {
+            res.send(error)
+        }
+        
         return false
     }
 

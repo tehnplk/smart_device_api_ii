@@ -90,6 +90,7 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
       'vn': "",
       'birth': '1980-04-18'
     }
+    console.dir(data)
     res.json(data)
     return false
   }

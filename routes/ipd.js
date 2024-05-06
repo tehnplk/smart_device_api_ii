@@ -68,6 +68,21 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     return false
   }
 
+  if (config.his == 'ihealth') {
+
+    data = {
+      'hn': hn,
+      'cid': hn,
+      'fullname': hn,
+      'sex': 1,
+      'an': hn,
+      'birth': '1980-04-18'
+    }
+    res.json(data)
+    return false
+
+  } // ihealth
+
 
   sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday as birth
   ,(select an from an_stat where hn = '${hn}' order by an DESC limit 1) an
@@ -120,6 +135,23 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
     return false
   }
 
+  if (config.his == 'ihealth') {
+
+    data = {
+      'hn': an,
+      'cid': an,
+      'fullname': an,
+      'sex': 1,
+      'an': an,
+      'birth': '1980-04-18'
+    }
+    res.json(data)
+    return false
+
+  } // ihealth
+
+  
+
 
   sql = `SELECT t.hn,p.cid,concat(p.pname,p.fname,' ',p.lname) fullname,p.sex,p.birthday as birth,t.an 
   from an_stat t INNER JOIN patient p ON t.hn = p.hn
@@ -160,6 +192,12 @@ router.post('/post_data', async function (req, res, next) {
   data = req.body
   console.log(data)
   var _now = moment().format('YYYYMMDDHHmmss')
+
+  if(config.his == 'ihealth'){
+    console.log('ihealth ipd...',data)
+    res.json(data)
+    return false
+  }
 
 
   let hl7 = `MSH|^~\\&|${data.data.machine}|${bmsgw.company}|HIS|BMS-HOSxP|${_now}||ORU^R01|2701|P|2.3\r\n`
