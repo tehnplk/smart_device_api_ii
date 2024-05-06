@@ -203,7 +203,7 @@ router.post('/post_data', async function (req, res, next) {
         rr:data.data.rr,sos:data.data.sos 
       }
     }
-    console.log('ihealth_data',body_data)
+    console.log('ihealth_data_ipd',body_data)
     try {
       n = await axios.post(`${config.ihealth_api}`, body_data, {
           headers: {
