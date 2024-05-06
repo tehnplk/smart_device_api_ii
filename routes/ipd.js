@@ -194,8 +194,28 @@ router.post('/post_data', async function (req, res, next) {
   var _now = moment().format('YYYYMMDDHHmmss')
 
   if(config.his == 'ihealth'){
-    console.log('ihealth ipd...',data)
-    res.json(data)
+    body_data = {
+      "cid": data.cid,
+      "an": data.an,
+      "device_data": { 
+        bps: data.data.bps, bpd: data.data.bpd, pulse: data.data.pulse, 
+        temp: data.data.tp,spo2:data.data.spo,hr:data.data.hr,
+        rr:data.data.rr,sos:data.data.sos 
+      }
+    }
+    console.log('ihealth_data',body_data)
+    try {
+      n = await axios.post(`${config.ihealth_api}`, body_data, {
+          headers: {
+              'Authorization': `${config.ihealth_token}`
+          }
+      })
+      console.log("iHealth Response ", n.status)
+      res.json(n.status, data)
+      
+    } catch (error) {
+      res.send(error)
+    }
     return false
   }
 
