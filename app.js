@@ -28,6 +28,10 @@ app.use('/sp', require('./routes/sp'))
 
 app.use('/service', require('./routes/service'))
 
+app.use('/terminal', require('./routes/terminal'))
+
+
+
 app.use('/ipd', require('./routes/ipd'))
 
 app.use('/test', require('./routes/test'))

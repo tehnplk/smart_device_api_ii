@@ -63,6 +63,8 @@ router.post('/visit_jhcis', async function (req, res, next) {
     claimtype = req.body.claimtype;
     claimcode = req.body.claimcode;
     vst_user = config.jhcis.user;
+    hosmain = req.body.hosmain;
+    hossub = req.body.hossub;
 
 
 
@@ -147,8 +149,8 @@ SELECT @weight as weight ,@height as height ,@pressure as pressure,@respri as re
             'dateupdate': dateupdate,
             'ipv4this': '0.0.0.0',
             'hiciauthen_nhso': claimtype,
-            'claimcode_nhso':claimcode,
-            'symptoms':claimcode
+            'claimcode_nhso': claimcode,
+            'symptoms': claimcode
 
         }
 
