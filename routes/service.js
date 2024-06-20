@@ -62,7 +62,7 @@ router.post('/visit_jhcis', async function (req, res, next) {
     rightno = req.body.rightno;
     claimtype = req.body.claimtype;
     claimcode = req.body.claimcode;
-    vst_user = req.body.vst_user;
+    vst_user = config.jhcis.user;
 
 
 
@@ -143,10 +143,12 @@ SELECT @weight as weight ,@height as height ,@pressure as pressure,@respri as re
             'money2': 0,
             'money3': 0,
             'username': vst_user,
-            'flagservice': '01',
+            'flagservice': '03',// 03 = จบบริการ
             'dateupdate': dateupdate,
             'ipv4this': '0.0.0.0',
-            'hiciauthen_nhso': claimcode
+            'hiciauthen_nhso': claimtype,
+            'claimcode_nhso':claimcode,
+            'symptoms':claimcode
 
         }
 

@@ -1,8 +1,8 @@
 {
     "mode_test": false,
-    "hoscode": "00000",
+    "hoscode": "05914",
     "his_support": "hosxp|jhcis|him|ihealth",
-    "his": "ihealth",
+    "his": "jhcis",
     "not_post_if_null_pt": true,
     "hosxp_patient_view": false,
     "ihealth_api":"https://ihealthrawae.net:8080/api/smart/send",
@@ -28,6 +28,6 @@
         "icode_in_time": "3001647"
     },
     "jhcis": {
-        "user": "chaow"
+        "user": "yaya"
     }
 }

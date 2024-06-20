@@ -54,6 +54,7 @@ router.get('/test', async function (req, res, next) {
   }
 
   data = {
+    'his':config.his,
     'test': 'SUCCESS',
     'hn': r[0][0].hn,
     'vn': r[0][0].vn,
