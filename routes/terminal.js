@@ -14,7 +14,7 @@ router.get('/test', (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const data = await db('x_queue_terminal').select('*');
-    res.json(data);
+    resstatus(200).json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
   try {
     const data = await db('x_queue_terminal').where('id', req.params.id).first();
     if (data) {
-      res.json(data);
+      res.status(200).json(data);
     } else {
       res.status(404).json({ message: 'Record not found' });
     }
@@ -40,7 +40,7 @@ router.get('/dep/:dep', async (req, res) => {
   try {
     const data = await db('x_queue_terminal').where({ 'dep_start': dep, 'visit_date': today }).orderBy('id', 'desc').first();
     if (data) {
-      res.json(data);
+      res.status(200).json(data);
     } else {
       res.status(404).json({ message: 'Record not found' });
     }
