@@ -61,7 +61,7 @@ router.post('/visit_jhcis', async function (req, res, next) {
     rightcode = req.body.rightcode;
     rightno = req.body.rightno;
     claimtype = req.body.claimtype;
-    claimcode = req.body.claimcode;
+    claimcode = req.body.claimcode|NaN;
     vst_user = config.jhcis.user;
     hosmain = req.body.hosmain;
     hossub = req.body.hossub;
