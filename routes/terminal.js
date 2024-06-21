@@ -1,35 +1,90 @@
 var express = require('express');
 var router = express.Router();
-var knex = require('../con_db')
+var db = require('../con_db')
 var moment = require('moment')
 var config = require('../config.json');
 const { raw } = require('mysql');
 const uuid = require('uuid');
 
-router.get('/', (req, res) => {
-    res.status(200).json({'successs':'ok'});
+router.get('/test', (req, res) => {
+  res.status(200).json({ 'successs': 'ok' });
 })
 
-router.get('/queue',async(req,res)=>{
-    today = moment().format('YYYY-MM-DD')
-    console.log(req.body)
-    try {
-        const {cid} = req.body;
-        const result = await knex('x_queue_terminal')
-          .where({ 'cid': cid, 'visit_date': today })
-          .first();
-    
-        if (result) {
-          res.status(200).json({ queue_num: result.queue_num ,queue_dep:result.queue_dep });
-        } else {
-          res.status(404).json({ message: 'No records found' });
-        }
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
+// Get all records
+router.get('/', async (req, res) => {
+  try {
+    const data = await db('x_queue_terminal').select('*');
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
+// Get a single record by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const data = await db('x_queue_terminal').where('id', req.params.id).first();
+    if (data) {
+      res.json(data);
+    } else {
+      res.status(404).json({ message: 'Record not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
+router.get('/dep/:dep', async (req, res) => {
+  today = moment().format('YYYY-MM-DD')
+  const { dep } = req.params
+  try {
+    const data = await db('x_queue_terminal').where({ 'dep_start': dep, 'visit_date': today }).orderBy('id', 'desc').first();
+    if (data) {
+      res.json(data);
+    } else {
+      res.status(404).json({ message: 'Record not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
+// Create a new record
+router.post('/', async (req, res) => {
+  try {
+    const [id] = await db('x_queue_terminal').insert(req.body);
+    res.status(201).json({ id });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Update a record by ID
+router.put('/:id', async (req, res) => {
+  try {
+    const rowsAffected = await db('x_queue_terminal').where('id', req.params.id).update(req.body);
+    if (rowsAffected) {
+      res.json({ message: 'Record updated' });
+    } else {
+      res.status(404).json({ message: 'Record not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Delete a record by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const rowsAffected = await db('x_queue_terminal').where('id', req.params.id).del();
+    if (rowsAffected) {
+      res.json({ message: 'Record deleted' });
+    } else {
+      res.status(404).json({ message: 'Record not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 module.exports = router;
