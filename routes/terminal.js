@@ -52,7 +52,14 @@ router.get('/dep/:dep', async (req, res) => {
 // Create a new record
 router.post('/', async (req, res) => {
   try {
-    const [id] = await db('x_queue_terminal').insert(req.body);
+    data = req.body
+    console.log('q',data)
+    const count = await db('x_queue_terminal').count('* as count').whereRaw('DATE(visit_date) = CURDATE()');
+    let q = count[0].count+1
+    data['queue_all_of_day'] = q
+
+    const [id] = await db('x_queue_terminal').insert(data);
+    
     res.status(201).json({ id });
   } catch (err) {
     res.status(500).json({ message: err.message });
