@@ -112,6 +112,7 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
   if (config.his == 'jhcis') {
     sql = `select p.pid as hn,idcard as cid,concat(c.titlename,p.fname,' ',p.lname) as fullname,p.sex as sex,birth
     , (select visitno from visit v inner join person p on v.pid = p.pid where v.visitdate = CURRENT_DATE and p.idcard = '${cid}' order by v.visitno DESC limit 1 ) as vn
+    ,p.rightcode as inscl
     from person p  left join ctitle c on c.titlecode = p.prename
     where p.idcard = '${cid}' limit 1`
   }
@@ -158,7 +159,7 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
     'vn': r[0][0].vn,
     'birth': r[0][0].birth,
     'addr': '1/1 ม.1 ต.ทดสอบ อ.ทดสอบ จ.ทดสอบ',
-    'inscl': '(O1) สิทธิเบิกกรมบัญชีกลาง (ข้าราชการ)'
+    'inscl': r[0][0].inscl
   }
   res.json(data)
 });

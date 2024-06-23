@@ -10,6 +10,62 @@ router.get('/test', (req, res) => {
   res.status(200).json({ 'successs': 'ok' });
 })
 
+router.get('/patient/:cid',async (req,res)=>{
+  let cid = req.params.cid
+  let sql = `
+select p.pid as hn,idcard as cid,concat(c.titlename,p.fname,' ',p.lname) as fullname,p.sex as sex,birth 
+,concat('(',p.rightcode,')',' ',rc.rightname) as inscl
+,concat(a.hno,' หมู่ที่',a.mu, ' ตำบล',tmb.subdistname, ' อำเภอ',amp.distname,  ' จังหวัด',chw.provname) addr
+from person p  
+left join ctitle c on c.titlecode = p.prename
+LEFT JOIN cright rc on rc.rightcode = p.rightcode
+LEFT JOIN personaddresscontact a on a.pid = p.pid
+LEFT JOIN csubdistrict tmb on CONCAT(tmb.provcode,tmb.distcode,tmb.subdistcode) = CONCAT(a.provcode,a.distcode,a.subdistcode)
+LEFT JOIN cdistrict amp on CONCAT(amp.provcode,amp.distcode) = CONCAT(a.provcode,a.distcode)
+LEFT JOIN cprovince chw on CONCAT(chw.provcode) = CONCAT(a.provcode)
+where p.idcard =  '${cid}'  limit 1
+`;
+console.log(sql)
+
+try {
+  r = await db.raw(sql)
+} catch (error) {
+  res.json(error)
+  return false
+}
+
+
+if (!r[0][0]) {
+  let data_none = {
+    'hn': NaN,
+    'cid': cid,
+    'fullname': 'ไม่พบข้อมูลบุคคล',
+    'sex': NaN,
+    'vn': NaN,
+    'birth': NaN,
+    'addr': NaN,
+    'inscl': NaN
+  }
+  console.log(data_none)
+  res.json(data_none)
+  return false
+}
+console.log(r[0][0])
+data = {
+  'hn': r[0][0].hn,
+  'cid': r[0][0].cid,
+  'fullname': r[0][0].fullname,
+  'sex': r[0][0].sex,
+  'vn': r[0][0].vn,
+  'birth': r[0][0].birth,
+  'addr': r[0][0].addr,
+  'inscl': r[0][0].inscl
+}
+res.json(data)
+
+
+});
+
 // Get all records
 router.get('/', async (req, res) => {
   try {
