@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
 
     const [id] = await db('x_queue_terminal').insert(data);
     
-    res.status(201).json({ id });
+    res.status(201).json({ id:id ,queue_all_of_day:q});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

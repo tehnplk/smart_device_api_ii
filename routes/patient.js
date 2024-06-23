@@ -9,7 +9,9 @@ data_none = {
   'fullname': NaN,
   'sex': NaN,
   'vn': NaN,
-  'birth': '1800-01-01'
+  'birth': '1800-01-01',
+  'addr': NaN,
+  'inscl': NaN
 }
 router.get('/test', async function (req, res, next) {
   if (config.mode_test) {
@@ -54,7 +56,7 @@ router.get('/test', async function (req, res, next) {
   }
 
   data = {
-    'his':config.his,
+    'his': config.his,
     'test': 'SUCCESS',
     'hn': r[0][0].hn,
     'vn': r[0][0].vn,
@@ -76,7 +78,9 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
       'fullname': 'Mr.TEST TEST',
       'sex': 1,
       'vn': '000000000000',
-      'birth': '1980-04-18'
+      'birth': '1980-04-18',
+      'addr': '1/1 ม.1 ต.ทดสอบ อ.ทดสอบ จ.ทดสอบ',
+      'inscl': '(O1) สิทธิเบิกกรมบัญชีกลาง (ข้าราชการ)'
     }
     res.json(data)
     return false
@@ -131,6 +135,17 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
   }
 
   if (!r[0][0]) {
+    let data_none = {
+      'hn': NaN,
+      'cid': cid,
+      'fullname': 'ไม่พบข้อมูลบุคคล',
+      'sex': NaN,
+      'vn': NaN,
+      'birth': NaN,
+      'addr': NaN,
+      'inscl': NaN
+    }
+    console.log(data_none)
     res.json(data_none)
     return false
   }
@@ -141,7 +156,9 @@ router.get('/get_patient_by_cid/:cid', async function (req, res, next) {
     'fullname': r[0][0].fullname,
     'sex': r[0][0].sex,
     'vn': r[0][0].vn,
-    'birth': r[0][0].birth
+    'birth': r[0][0].birth,
+    'addr': '1/1 ม.1 ต.ทดสอบ อ.ทดสอบ จ.ทดสอบ',
+    'inscl': '(O1) สิทธิเบิกกรมบัญชีกลาง (ข้าราชการ)'
   }
   res.json(data)
 });
