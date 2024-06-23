@@ -147,7 +147,7 @@ SELECT @weight as weight ,@height as height ,@pressure as pressure,@respri as re
             'username': vst_user,
             'flagservice': '03',// 03 = จบบริการ
             'dateupdate': dateupdate,
-            'ipv4this': '0.0.0.0',
+            'ipv4this': '',
             'hiciauthen_nhso': claimtype,
             'claimcode_nhso': claimcode,
             'symptoms': claimcode
