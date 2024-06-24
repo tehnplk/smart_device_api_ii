@@ -10,7 +10,7 @@ router.get('/test', (req, res) => {
   res.status(200).json({ 'successs': 'ok' });
 })
 
-router.get('/patient/:cid',async (req,res)=>{
+router.get('/patient/:cid', async (req, res) => {
   let cid = req.params.cid
   let sql = `
 select p.pid as hn,idcard as cid,concat(c.titlename,p.fname,' ',p.lname) as fullname,p.sex as sex,birth 
@@ -25,43 +25,43 @@ LEFT JOIN cdistrict amp on CONCAT(amp.provcode,amp.distcode) = CONCAT(a.provcode
 LEFT JOIN cprovince chw on CONCAT(chw.provcode) = CONCAT(a.provcode)
 where p.idcard =  '${cid}'  limit 1
 `;
-console.log(sql)
+  console.log(sql)
 
-try {
-  r = await db.raw(sql)
-} catch (error) {
-  res.json(error)
-  return false
-}
-
-
-if (!r[0][0]) {
-  let data_none = {
-    'hn': NaN,
-    'cid': cid,
-    'fullname': 'ไม่พบข้อมูลบุคคล',
-    'sex': NaN,
-    'vn': NaN,
-    'birth': NaN,
-    'addr': NaN,
-    'inscl': NaN
+  try {
+    r = await db.raw(sql)
+  } catch (error) {
+    res.json(error)
+    return false
   }
-  console.log(data_none)
-  res.json(data_none)
-  return false
-}
-console.log(r[0][0])
-data = {
-  'hn': r[0][0].hn,
-  'cid': r[0][0].cid,
-  'fullname': r[0][0].fullname,
-  'sex': r[0][0].sex,
-  'vn': r[0][0].vn,
-  'birth': r[0][0].birth,
-  'addr': r[0][0].addr,
-  'inscl': r[0][0].inscl
-}
-res.json(data)
+
+
+  if (!r[0][0]) {
+    let data_none = {
+      'hn': NaN,
+      'cid': cid,
+      'fullname': 'ไม่พบข้อมูลบุคคล',
+      'sex': NaN,
+      'vn': NaN,
+      'birth': NaN,
+      'addr': NaN,
+      'inscl': NaN
+    }
+    console.log(data_none)
+    res.json(data_none)
+    return false
+  }
+  console.log(r[0][0])
+  data = {
+    'hn': r[0][0].hn,
+    'cid': r[0][0].cid,
+    'fullname': r[0][0].fullname,
+    'sex': r[0][0].sex,
+    'vn': r[0][0].vn,
+    'birth': r[0][0].birth,
+    'addr': r[0][0].addr,
+    'inscl': r[0][0].inscl
+  }
+  res.json(data)
 
 
 });
@@ -107,16 +107,29 @@ router.get('/dep/:dep', async (req, res) => {
 
 // Create a new record
 router.post('/', async (req, res) => {
+
+  let data = req.body
+  const { cid ,claim_code} = req.body
+  if (cid) {
+    let today = moment().format('YYYY-MM-DD')
+    let row = await db('x_queue_terminal').where({ cid: cid, visit_date: today }).orderBy('id', 'desc').first()
+    console.log(row)
+    if (row) {
+      row['claim_code'] = claim_code
+      await db('x_queue_terminal').where({ cid: cid, visit_date: today }).update(row)
+      res.status(202).json(row);
+      return;
+    }
+  }
+
   try {
-    data = req.body
-    console.log('q',data)
     const count = await db('x_queue_terminal').count('* as count').whereRaw('DATE(visit_date) = CURDATE()');
-    let q = count[0].count+1
+    let q = count[0].count + 1
     data['queue_all_of_day'] = q
 
     const [id] = await db('x_queue_terminal').insert(data);
-    
-    res.status(201).json({ id:id ,queue_all_of_day:q});
+
+    res.status(201).json({ id: id, queue_all_of_day: q });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
