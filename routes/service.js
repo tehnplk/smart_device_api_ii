@@ -56,12 +56,12 @@ router.get('/check_patient/:cid', async (req, res, next) => {
 
 router.post('/visit_jhcis', async function (req, res, next) {
     data = req.body
-    console.log('post data', data)
+    console.log('visit',data)
     cid = req.body.cid;
     rightcode = req.body.rightcode;
     rightno = req.body.rightno;
     claimtype = req.body.claimtype;
-    claimcode = req.body.claimcode|NaN;
+    claimcode = req.body.claimcode;
     vst_user = config.jhcis.user;
     hosmain = req.body.hosmain;
     hossub = req.body.hossub;
@@ -99,7 +99,7 @@ router.post('/visit_jhcis', async function (req, res, next) {
 
             u = await knex('visit').update({
                 'claimcode_nhso': claimcode,
-            }).where('visitno', vn).whereNull('hiciauthen_nhso')
+            }).where({'visitno':vn})
 
             resp = {
                 'visit': 'exist',
