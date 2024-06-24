@@ -98,7 +98,7 @@ router.post('/visit_jhcis', async function (req, res, next) {
             //console.log(vn)
 
             u = await knex('visit').update({
-                'hiciauthen_nhso': claimcode
+                'claimcode_nhso': claimcode,
             }).where('visitno', vn).whereNull('hiciauthen_nhso')
 
             resp = {
