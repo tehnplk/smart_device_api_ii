@@ -56,7 +56,7 @@ router.get('/check_patient/:cid', async (req, res, next) => {
 
 router.post('/visit_jhcis', async function (req, res, next) {
     data = req.body
-    console.log('visit',data)
+    console.log('visit', data)
     cid = req.body.cid;
     rightcode = req.body.rightcode;
     rightno = req.body.rightno;
@@ -96,10 +96,11 @@ router.post('/visit_jhcis', async function (req, res, next) {
         if (today_visit !== undefined) {
             vn = today_visit.visitno
             //console.log(vn)
-
-            u = await knex('visit').update({
-                'claimcode_nhso': claimcode,
-            }).where({'visitno':vn})
+            if (claimcode) {
+                u = await knex('visit').update({
+                    'claimcode_nhso': claimcode,
+                }).where({ 'visitno': vn })
+            }
 
             resp = {
                 'visit': 'exist',
