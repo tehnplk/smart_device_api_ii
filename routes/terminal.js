@@ -107,11 +107,11 @@ router.get('/dep/:dep', async (req, res) => {
 
 // Create a new record
 router.post('/', async (req, res) => {
-
+  let today = moment().format('YYYY-MM-DD')
+  let now = moment().format('YYYY-MM-DD HH:mm:ss')
   let data = req.body
   const { cid ,claim_code} = req.body
-  if (cid) {
-    let today = moment().format('YYYY-MM-DD')
+  if (cid) {    
     let row = await db('x_queue_terminal').where({ cid: cid, visit_date: today }).orderBy('id', 'desc').first()
     console.log(row)
     if (row) {
@@ -126,11 +126,13 @@ router.post('/', async (req, res) => {
     const count = await db('x_queue_terminal').count('* as count').whereRaw('DATE(visit_date) = CURDATE()');
     let q = count[0].count + 1
     data['queue_all_of_day'] = q
+    data['dep_current_begin_at'] = now
 
     const [id] = await db('x_queue_terminal').insert(data);
 
     res.status(201).json({ id: id, queue_all_of_day: q });
   } catch (err) {
+    console.log(err.message)
     res.status(500).json({ message: err.message });
   }
 });
