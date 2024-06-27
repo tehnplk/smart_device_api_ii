@@ -4,17 +4,18 @@
     "his_support": "hosxp|jhcis|him|ihealth",
     "his": "jhcis",
     "not_post_if_null_pt": true,
-    "hosxp_patient_view": false,
+    "hosxp_patient_view": true,
+    "hosxp_patient_view_name": "patient_visit_infoIPD",
     "ihealth_api":"https://ihealthrawae.net:8080/api/smart/send",
     "ihealth_token":"2452cac74071f1d643f636358527354628cf2ca187121f36b43ff62b0ffda149f3938328d5ad5ae7d155e40df9ff4c5f9e224a51376e377a6d698c97aab84697",
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",
         "host": "localhost",
-        "port": 3333,
+        "port": 3306,
         "user": "root",
-        "password": "123456",
-        "database": "jhcisdb"
+        "password": "112233",
+        "database": "bms"
     },
     "api": {
         "port": 3000

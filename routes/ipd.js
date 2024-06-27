@@ -6,6 +6,7 @@ var config = require('../config.json')
 var bmsgw = require('../bmsgw.json')
 var knex_gw = require('../con_db_bmsgw')
 const axios = require('axios');
+const _view = config.hosxp_patient_view_name;
 
 data_none = {
   'hn': NaN,
@@ -25,8 +26,14 @@ router.get('/test', async function (req, res, next) {
     res.json({ 'his': 'ihealth' })
     return false
   }
+  
 
   sql = "select an , hn , regdate from an_stat order by an DESC limit 1"
+
+  if(config.hosxp_patient_view){
+    
+    sql = `select an , hn , regdate from ${_view} order by an DESC limit 1`
+  }
 
 
   try {
@@ -87,6 +94,10 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday as birth
   ,(select an from an_stat where hn = '${hn}' order by an DESC limit 1) an
   from patient where hn = '${hn}' limit 1`
+  if(config.hosxp_patient_view){
+    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex_name as sex,birthday as birth,an
+          from ${_view} where hn = '${hn}' order by an DESC limit 1`
+  }
 
 
 
@@ -156,6 +167,11 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
   sql = `SELECT t.hn,p.cid,concat(p.pname,p.fname,' ',p.lname) fullname,p.sex,p.birthday as birth,t.an 
   from an_stat t INNER JOIN patient p ON t.hn = p.hn
   WHERE t.an = '${an}'`
+
+  if(config.hosxp_patient_view){
+    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex_name as sex,birthday as birth,an
+          from ${_view} where an = '${an}'`
+  }
 
 
 
