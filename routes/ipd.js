@@ -26,12 +26,12 @@ router.get('/test', async function (req, res, next) {
     res.json({ 'his': 'ihealth' })
     return false
   }
-  
+
 
   sql = "select an , hn , regdate from an_stat order by an DESC limit 1"
 
-  if(config.hosxp_patient_view){
-    
+  if (config.hosxp_patient_view) {
+
     sql = `select an , hn , regdate from ${_view} order by an DESC limit 1`
   }
 
@@ -94,7 +94,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday as birth
   ,(select an from an_stat where hn = '${hn}' order by an DESC limit 1) an
   from patient where hn = '${hn}' limit 1`
-  if(config.hosxp_patient_view){
+  if (config.hosxp_patient_view) {
     sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex_name as sex,birthday as birth,an
           from ${_view} where hn = '${hn}' order by an DESC limit 1`
   }
@@ -161,14 +161,14 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
 
   } // ihealth
 
-  
+
 
 
   sql = `SELECT t.hn,p.cid,concat(p.pname,p.fname,' ',p.lname) fullname,p.sex,p.birthday as birth,t.an 
   from an_stat t INNER JOIN patient p ON t.hn = p.hn
   WHERE t.an = '${an}'`
 
-  if(config.hosxp_patient_view){
+  if (config.hosxp_patient_view) {
     sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex_name as sex,birthday as birth,an
           from ${_view} where an = '${an}'`
   }
@@ -209,26 +209,26 @@ router.post('/post_data', async function (req, res, next) {
   console.log(data)
   var _now = moment().format('YYYYMMDDHHmmss')
 
-  if(config.his == 'ihealth'){
+  if (config.his == 'ihealth') {
     body_data = {
       "cid": data.cid,
       "an": data.an,
-      "device_data": { 
-        bps: data.data.bps, bpd: data.data.bpd, pulse: data.data.press_pulse, 
-        temp: data.data.tp,spo2:data.data.spo,hr:data.data.hr,
-        rr:data.data.rr,sos:data.data.sos 
+      "device_data": {
+        bps: data.data.bps, bpd: data.data.bpd, pulse: data.data.press_pulse,
+        temp: data.data.tp, spo2: data.data.spo, hr: data.data.hr,
+        rr: data.data.rr, sos: data.data.sos
       }
     }
-    console.log('ihealth_data_ipd',body_data)
+    console.log('ihealth_data_ipd', body_data)
     try {
       n = await axios.post(`${config.ihealth_api}`, body_data, {
-          headers: {
-              'Authorization': `${config.ihealth_token}`
-          }
+        headers: {
+          'Authorization': `${config.ihealth_token}`
+        }
       })
       console.log("iHealth Response ", n.status)
       res.json(n.status, data)
-      
+
     } catch (error) {
       res.send(error)
     }
@@ -240,6 +240,9 @@ router.post('/post_data', async function (req, res, next) {
   hl7 = hl7 + `PID|1||${data.hn}|\r\n`
   hl7 = hl7 + `PV1||I|||${data.an}||||||||||||||\n`
   hl7 = hl7 + `OBR|1|||||${_now}||||||||${_now}\r\n`
+  hl7 = hl7 + `OBX|1|ST|WEIGHT||${data.data.w}|KG.|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|2|ST|HEIGHT||${data.data.h}|CM.|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|3|ST|BMI||${data.data.bmi}| Kg/m2|||||F|||${_now}\r\n`
   hl7 = hl7 + `OBX|4|ST|TEMP||${data.data.tp}|C|||||F|||${_now}\r\n`
   hl7 = hl7 + `OBX|5|ST|SYSTOLIC||${data.data.bps}|mmHg|||||F|||${_now}\r\n`
   hl7 = hl7 + `OBX|6|ST|DIASTOLIC||${data.data.bpd}|mmHg|||||F|||${_now}\r\n`
