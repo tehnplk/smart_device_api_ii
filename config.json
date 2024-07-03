@@ -12,10 +12,10 @@
         "client_support": "mysql | pg",
         "client": "mysql",
         "host": "localhost",
-        "port": 3306,
+        "port": 3333,
         "user": "root",
-        "password": "112233",
-        "database": "bms"
+        "password": "123456",
+        "database": "jhcisdb"
     },
     "api": {
         "port": 3000

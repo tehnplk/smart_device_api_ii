@@ -95,7 +95,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   ,(select an from an_stat where hn = '${hn}' order by an DESC limit 1) an
   from patient where hn = '${hn}' limit 1`
   if (config.hosxp_patient_view) {
-    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex_name as sex,birthday as birth,an
+    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,if(sex_name='ชาย','1','2') as sex,birthday as birth,an
           from ${_view} where hn = '${hn}' order by an DESC limit 1`
   }
 
@@ -169,7 +169,7 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
   WHERE t.an = '${an}'`
 
   if (config.hosxp_patient_view) {
-    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex_name as sex,birthday as birth,an
+    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,if(sex_name='ชาย','1','2') as sex,birthday as birth,an
           from ${_view} where an = '${an}'`
   }
 
