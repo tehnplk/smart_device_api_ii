@@ -1,3 +1,3 @@
 exports.version = function () {
-  return "II-3.3.1 (2024-06-26)(BMSGW/OPD/IPD/SOS)";
+  return "II-3.3.2 (2024-07-03)(BMSGW/OPD/IPD/SOS)";
 };
