@@ -228,11 +228,11 @@ router.post('/visit_hosxp', async (req, res, next) => {
     if (req.body.sub_inscl) {
         req_pttype = req.body.sub_inscl;
     }
-    if (req.body.hospmain) {
-        req_hospmain = req.body.hospmain;
+    if (req.body.hosmain) {
+        req_hospmain = req.body.hosmain;
     }
-    if (req.body.hospsub) {
-        req_hospsub = req.body.hospsub;
+    if (req.body.hossub) {
+        req_hospsub = req.body.hossub;
     }
 
     try {
