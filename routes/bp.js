@@ -20,7 +20,15 @@ router.post('/post_data_bp', async function (req, res, next) {
         body_data = {
             "cid": data.cid,
             "vn": data.vn,
-            "device_data": { bps: data.data.bps, bpd: data.data.bpd, pulse: data.data.pulse, temp: data.data.tp }
+            "device_data": {
+                bps: data.data.bps,
+                bpd: data.data.bpd,
+                pulse: data.data.pulse,
+                temp: data.data.tp,
+                sp:data.data.sp,
+                rr:data.data.rr,
+                hr:data.data.hr
+            }
         }
         try {
             n = await axios.post(`${config.ihealth_api}`, body_data, {
@@ -30,11 +38,11 @@ router.post('/post_data_bp', async function (req, res, next) {
             })
             console.log("iHealth Response ", n.status)
             res.json(n.status, data)
-            
+
         } catch (error) {
             res.send(error)
         }
-        
+
         return false
     }
 
