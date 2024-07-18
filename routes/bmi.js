@@ -21,8 +21,8 @@ router.post('/post_data_bmi', async function (req, res, next) {
             "cid": data.cid,
             "vn": data.vn,
             "device_data": {
-                weight:data.data.bw,
-                height:data.data.bh,
+                weight:data.data.weight,
+                height:data.data.height,
                 bmi:data.data.bmi
             }
         }
@@ -55,8 +55,8 @@ router.post('/post_data_bmi', async function (req, res, next) {
             hl7 = hl7 + `PID|1||${data.hn}|\r\n`
             hl7 = hl7 + `PV1|||||||||||||||||||\n`
             hl7 = hl7 + `OBR|1|||||${_now}||||||||${_now}\r\n`
-            hl7 = hl7 + `OBX|1|ST|WEIGHT||${data.data.bw}|Kg|||||F|||${_now}\r\n`
-            hl7 = hl7 + `OBX|2|ST|HEIGHT||${data.data.bh}|cm|||||F|||${_now}\r\n`
+            hl7 = hl7 + `OBX|1|ST|WEIGHT||${data.data.weight}|Kg|||||F|||${_now}\r\n`
+            hl7 = hl7 + `OBX|2|ST|HEIGHT||${data.data.height}|cm|||||F|||${_now}\r\n`
             hl7 = hl7 + `OBX|3|ST|BMI||${data.data.bmi}|kb/m2|||||F|||${_now}\r\n`
 
 
@@ -85,8 +85,8 @@ router.post('/post_data_bmi', async function (req, res, next) {
                 r = await knex('opdscreen')
                     .where('vn', '=', data.vn)
                     .update({
-                        bw: data.data.bw,
-                        height: Math.ceil(data.data.bh),
+                        bw: data.data.weight,
+                        height: Math.ceil(data.data.height),
                         bmi: data.data.bmi
                     })
                 res.json(r)
@@ -101,8 +101,8 @@ router.post('/post_data_bmi', async function (req, res, next) {
                 r = await knex('visit')
                     .where('visitno', '=', data.vn)
                     .update({
-                        weight: data.data.bw,
-                        height: Math.ceil(data.data.bh),
+                        weight: data.data.weight,
+                        height: Math.ceil(data.data.height),
                     })
                 console.log(r)
                 res.json(r)
@@ -117,8 +117,8 @@ router.post('/post_data_bmi', async function (req, res, next) {
             console.log('Him', req.body)
             raw = req.body
             let vn = raw.vn;
-            let high = raw.data.bh
-            let weight = raw.data.bw
+            let high = raw.data.weight
+            let weight = raw.data.height
             let bmi = raw.data.bmi
 
             console.log('POST BMI DATA = ', vn, high,weight,bmi);
@@ -190,8 +190,8 @@ router.post('/post_data_bmi_log', async function (req, res, next) {
         'note1': data.data.dep,
         'note2': data.data.staff,
         'note3': data.data.machine,
-        'bw': data.data.bw,
-        'bh': Math.ceil(data.data.bh),
+        'bw': data.data.weight,
+        'bh': Math.ceil(data.data.height),
         'bmi': data.data.bmi
     };
     try {

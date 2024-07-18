@@ -217,8 +217,8 @@ router.post('/post_data', async function (req, res, next) {
         bps: data.data.bps, 
         bpd: data.data.bpd, 
         pulse: data.data.press_pulse,
-        temp: data.data.tp, 
-        spo2: data.data.spo, 
+        tp: data.data.tp, 
+        spo2: data.data.spo2, 
         hr: data.data.hr,
         rr: data.data.rr, 
         sos: data.data.sos
@@ -254,7 +254,7 @@ router.post('/post_data', async function (req, res, next) {
   hl7 = hl7 + `OBX|7|ST|RR||${data.data.rr}|RM|||||F|||${_now}\r\n`
   hl7 = hl7 + `OBX|8|ST|PULSE||${data.data.press_pulse}|bpm|||||F|||${_now}\r\n`
   hl7 = hl7 + `OBX|9|ST|HEARTRATE||${data.data.hr}|HRM|||||F|||${_now}\r\n`
-  hl7 = hl7 + `OBX|10|ST|SPO2||${data.data.spo}|%Spo2|||||F|||${_now}\r\n`
+  hl7 = hl7 + `OBX|10|ST|SPO2||${data.data.spo2}|%Spo2|||||F|||${_now}\r\n`
   hl7 = hl7 + `OBX|11|ST|SOS_SCORE||${data.data.sos}|Point|||||F|||${_now}\r\n`
 
   console.log('hl7', hl7)

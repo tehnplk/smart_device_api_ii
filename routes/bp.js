@@ -24,7 +24,7 @@ router.post('/post_data_bp', async function (req, res, next) {
                 bps: data.data.bps,
                 bpd: data.data.bpd,
                 pulse: data.data.pulse,
-                temp: data.data.tp,
+                tp: data.data.tp,
                 spo2:data.data.spo2,
                 rr:data.data.rr,
                 hr:data.data.hr
