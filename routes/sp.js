@@ -25,7 +25,7 @@ router.post('/post_data_sp', async function (req, res, next) {
         body_data = {
             "cid": data.cid,
             "vn": data.vn,
-            "device_data": { spo2: data.data.sp ,pulse:data.data.pulse }
+            "device_data": { spo2: data.data.spo2 ,pulse:data.data.pulse }
         }
         n = await axios.post(`${config.ihealth_api}`, body_data, {
             headers: {
@@ -40,7 +40,7 @@ router.post('/post_data_sp', async function (req, res, next) {
     r = await knex('opdscreen')
         .where('vn', '=', data.vn)
         .update({
-            spo2: data.data.sp
+            spo2: data.data.spo2
         })
     res.json(r)
 
@@ -59,7 +59,7 @@ router.post('/post_data_sp_log', async function (req, res, next) {
         'note1': data.data.dep,
         'note2': data.data.staff,
         'note3': data.data.machine,
-        'sp': data.data.sp,
+        'spo2': data.data.spo2,
         'pulse': data.data.pulse,
     };
     r = await knex('smart_gate_sp').insert(raw)
