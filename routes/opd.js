@@ -214,9 +214,14 @@ router.post('/post_data', async function (req, res, next) {
       "cid": data.cid,
       "vn": data.vn,
       "device_data": {
-        bps: data.data.bps, bpd: data.data.bpd, pulse: data.data.press_pulse,
-        temp: data.data.tp, spo2: data.data.spo, hr: data.data.hr,
-        rr: data.data.rr, sos: data.data.sos
+        bps: data.data.bps, 
+        bpd: data.data.bpd, 
+        pulse: data.data.press_pulse,
+        temp: data.data.tp, 
+        spo2: data.data.spo, 
+        hr: data.data.hr,
+        rr: data.data.rr, 
+        sos: data.data.sos
       }
     }
     console.log('ihealth_data_opd', body_data)
