@@ -20,7 +20,11 @@ router.post('/post_data_bmi', async function (req, res, next) {
         body_data = {
             "cid": data.cid,
             "vn": data.vn,
-            "device_data": {weight:data.data.bw,height:data.data.bh,bmi:data.data.bmi}
+            "device_data": {
+                weight:data.data.bw,
+                height:data.data.bh,
+                bmi:data.data.bmi
+            }
         }
         n = await axios.post(`${config.ihealth_api}`, body_data, {
             headers: {
