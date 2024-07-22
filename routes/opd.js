@@ -210,17 +210,23 @@ router.post('/post_data', async function (req, res, next) {
   var _now = moment().format('YYYYMMDDHHmmss')
 
   if (config.his == 'ihealth') {
+    if (!data.vn) {
+      data['vn'] = 'x'
+    }
+    if (!data.cid) {
+      data['cid'] = 'x'
+    }
     body_data = {
       "cid": data.cid,
       "vn": data.vn,
       "device_data": {
-        bps: data.data.bps, 
-        bpd: data.data.bpd, 
+        bps: data.data.bps,
+        bpd: data.data.bpd,
         pulse: data.data.press_pulse,
-        tp: data.data.tp, 
-        spo2: data.data.spo2, 
+        tp: data.data.tp,
+        spo2: data.data.spo2,
         hr: data.data.hr,
-        rr: data.data.rr, 
+        rr: data.data.rr,
         sos: data.data.sos
       }
     }
@@ -232,7 +238,8 @@ router.post('/post_data', async function (req, res, next) {
         }
       })
       console.log("iHealth Response ", n.status)
-      res.json(n.status, data)
+      body_data['ihealth'] = n.data
+      res.status(200).json(body_data)
 
     } catch (error) {
       res.send(error)

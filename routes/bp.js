@@ -17,6 +17,12 @@ router.post('/post_data_bp', async function (req, res, next) {
     }
 
     if (config.his == 'ihealth') {
+        if (!data.vn) {
+            data['vn'] = 'x'
+        }
+        if (!data.cid) {
+            data['cid'] = 'x'
+        }
         body_data = {
             "cid": data.cid,
             "vn": data.vn,
@@ -25,9 +31,9 @@ router.post('/post_data_bp', async function (req, res, next) {
                 bpd: data.data.bpd,
                 pulse: data.data.pulse,
                 tp: data.data.tp,
-                spo2:data.data.spo2,
-                rr:data.data.rr,
-                hr:data.data.hr
+                spo2: data.data.spo2,
+                rr: data.data.rr,
+                hr: data.data.hr
             }
         }
         try {
@@ -37,7 +43,8 @@ router.post('/post_data_bp', async function (req, res, next) {
                 }
             })
             console.log("iHealth Response ", n.status)
-            res.json(n.status, data)
+            body_data['ihealth'] = n.data
+            res.status(200).json(body_data)
 
         } catch (error) {
             res.send(error)

@@ -17,13 +17,19 @@ router.post('/post_data_bmi', async function (req, res, next) {
     }
 
     if (config.his == 'ihealth') {
+        if (!data.vn) {
+            data['vn'] = 'x'
+        }
+        if (!data.cid) {
+            data['cid'] = 'x'
+        }
         body_data = {
             "cid": data.cid,
             "vn": data.vn,
             "device_data": {
-                weight:data.data.weight,
-                height:data.data.height,
-                bmi:data.data.bmi
+                weight: data.data.weight,
+                height: data.data.height,
+                bmi: data.data.bmi
             }
         }
         n = await axios.post(`${config.ihealth_api}`, body_data, {
@@ -32,7 +38,8 @@ router.post('/post_data_bmi', async function (req, res, next) {
             }
         })
         console.log("iHealth Response ", n.status)
-        res.json(n.status, data)
+        body_data['ihealth'] = n.data
+        res.status(200).json(body_data)
         return false
     }
 
@@ -45,7 +52,7 @@ router.post('/post_data_bmi', async function (req, res, next) {
         return;
     }
     if (config.his == '้him') {
-        res.json({'resp':'try add to him.'})
+        res.json({ 'resp': 'try add to him.' })
         retu
     }
 
@@ -112,7 +119,7 @@ router.post('/post_data_bmi', async function (req, res, next) {
 
         }
 
-        if (config.his == 'him') {            
+        if (config.his == 'him') {
 
             console.log('Him', req.body)
             raw = req.body
@@ -121,7 +128,7 @@ router.post('/post_data_bmi', async function (req, res, next) {
             let weight = raw.data.height
             let bmi = raw.data.bmi
 
-            console.log('POST BMI DATA = ', vn, high,weight,bmi);
+            console.log('POST BMI DATA = ', vn, high, weight, bmi);
             if (!vn) {
                 res.json({ 'vn': '' })
                 return false;
@@ -148,8 +155,8 @@ router.post('/post_data_bmi', async function (req, res, next) {
                     })
                     .update({
                         high: high,
-                        weight:weight,
-                        bmi:bmi
+                        weight: weight,
+                        bmi: bmi
                     })
                 res.json(r)
             } catch (error) {
@@ -158,7 +165,7 @@ router.post('/post_data_bmi', async function (req, res, next) {
             return;
 
         }
-           
+
 
     }
 

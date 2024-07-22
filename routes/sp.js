@@ -22,10 +22,16 @@ router.post('/post_data_sp', async function (req, res, next) {
     }
 
     if (config.his == 'ihealth') {
+        if (!data.vn) {
+            data['vn'] = 'x'
+        }
+        if (!data.cid) {
+            data['cid'] = 'x'
+        }
         body_data = {
             "cid": data.cid,
             "vn": data.vn,
-            "device_data": { spo2: data.data.spo2 ,pulse:data.data.pulse }
+            "device_data": { spo2: data.data.spo2, pulse: data.data.pulse }
         }
         n = await axios.post(`${config.ihealth_api}`, body_data, {
             headers: {
@@ -33,7 +39,8 @@ router.post('/post_data_sp', async function (req, res, next) {
             }
         })
         console.log("iHealth Response ", n.status)
-        res.json(n.status, data)
+        body_data['ihealth'] = n.data
+        res.status(200).json(body_data)
         return false
     }
 
