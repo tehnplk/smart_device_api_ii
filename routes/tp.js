@@ -21,7 +21,7 @@ router.post('/post_data_tp', async function (req, res, next) {
         body_data = {
             "cid": data.cid,
             "vn": data.vn,
-            "device_data": { temp: data.data.tp }
+            "device_data": { tp: data.data.tp }
         }
         n = await axios.post(`${config.ihealth_api}`, body_data, {
             headers: {
