@@ -51,7 +51,7 @@ router.post('/post_data_bmi', async function (req, res, next) {
         res.json({ 'hn': 'no hn', 'data': data.data })
         return;
     }
-    if (config.his == '้him') {
+    if (config.his == 'him') {
         res.json({ 'resp': 'try add to him.' })
         retu
     }

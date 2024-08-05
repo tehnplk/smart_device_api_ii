@@ -30,7 +30,7 @@ app.use('/service', require('./routes/service'))
 
 app.use('/terminal', require('./routes/terminal'))
 
-
+app.use('/ovstkey', require('./routes/ovstkey'))
 
 app.use('/ipd', require('./routes/ipd'))
 

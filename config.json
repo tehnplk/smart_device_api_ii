@@ -1,6 +1,6 @@
 {
     "mode_test": false,
-    "hoscode": "05914",
+    "hoscode": "07480",
     "his_support": "hosxp|jhcis|him|ihealth",
     "his": "ihealth",
     "not_post_if_null_pt": true,
@@ -18,7 +18,7 @@
         "database": "jhcisdb"
     },
     "api": {
-        "port": 3001
+        "port": 3000
     },
     "hosxp": {
         "doctor": "0001",
