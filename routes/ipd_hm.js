@@ -20,10 +20,18 @@ router.get('/test', async function (req, res, next) {
 });
 
 router.get('/gen_hm_token', async function (req, res, next) {
-  url_login = "http://ipdpaperless.hosmerge.net:9500/api/userLogin"
-  url_checkAuthen = "http://ipdpaperless.hosmerge.net:9500/api/checkAuthen"
+  url_login = "/api/userLogin"
+  url_checkAuthen = "/api/checkAuthen"
 
-  const content = moment().format('YYYYMMDDhhmmss')
+  r = await axios.post(url_login, {
+    "username": "systemGetApi",
+    "password": "0e10b9bf963afb62136c9cb8662f397a"
+  })
+
+  console.log(r.data)
+  content = r.data.accessToken
+
+
   await fs.writeFile('hm_token.txt', content, 'utf8');
 
   res.json({ 'done': content })
