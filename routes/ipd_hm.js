@@ -4,16 +4,17 @@ var config = require('../config.json')
 var moment = require('moment')
 const axios = require('axios');
 const fs = require('fs').promises;
-
-
-
+axios.defaults.baseURL = 'http://localhost:3000';
 
 
 router.get('/test', async function (req, res, next) {
+  
   const content = moment().format('YYYYMMDDhhmmss')
   await fs.writeFile('hm_token.txt', content, 'utf8');
   let data = await fs.readFile('hm_token.txt', 'utf8')
-  res.json({ 'token': data })
+
+  n = await axios.post('/test/post', { 'data': data })
+  res.json({ 'done': n.data })
 
 });
 
