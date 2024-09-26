@@ -50,7 +50,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     'cid': hn,
     'fullname': hn,
     'sex': 1,
-    'an': hn,
+    'an': '',
     'birth': '1980-04-18'
   }
   res.json(data)
@@ -76,7 +76,7 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
   }
 
   data = {
-    'hn': an,
+    'hn': '',
     'cid': an,
     'fullname': an,
     'sex': 1,
