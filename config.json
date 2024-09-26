@@ -1,8 +1,8 @@
 {
     "mode_test": true,
     "hoscode": "07480",
-    "his_support": "hosxp|jhcis|him|ihealth",
-    "his": "ihealth",
+    "his_support": "hosxp|jhcis|him|ihealth|hm",
+    "his": "hm",
     "not_post_if_null_pt": true,
     "hosxp_patient_view": false,
     "hosxp_patient_view_name": "patient_visit_infoIPD",

@@ -19,4 +19,9 @@ router.get('/send', async function (req, res, next) {
     res.json({ 'status': body_data.device_data })
 });
 
+router.post('/post',function (req,res){
+    console.log(req.body)
+    res.json(req.body)
+})
+
 module.exports = router;

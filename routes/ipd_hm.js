@@ -1,63 +1,31 @@
 var express = require('express');
 var router = express.Router();
-var knex = require('../con_db');
-var moment = require('moment')
 var config = require('../config.json')
-var bmsgw = require('../bmsgw.json')
-var knex_gw = require('../con_db_bmsgw')
+var moment = require('moment')
 const axios = require('axios');
-const _view = config.hosxp_patient_view_name;
+const fs = require('fs').promises;
 
-data_none = {
-  'hn': NaN,
-  'cid': NaN,
-  'fullname': NaN,
-  'sex': NaN,
-  'an': NaN,
-  'birth': '1800-01-01'
-}
+
+
+
+
 router.get('/test', async function (req, res, next) {
-  if (config.mode_test) {
-    res.json({ 'mode_test': true })
-    return false
-  }
+  const content = moment().format('YYYYMMDDhhmmss')
+  await fs.writeFile('hm_token.txt', content, 'utf8');
+  let data = await fs.readFile('hm_token.txt', 'utf8')
+  res.json({ 'token': data })
 
-  if (config.his == 'ihealth') {
-    res.json({ 'his': 'ihealth' })
-    return false
-  }
+});
 
+router.get('/gen_hm_token', async function (req, res, next) {
+  url_login = "http://ipdpaperless.hosmerge.net:9500/api/userLogin"
+  url_checkAuthen = "http://ipdpaperless.hosmerge.net:9500/api/checkAuthen"
 
-  sql = "select an , hn , regdate from an_stat order by an DESC limit 1"
+  const content = moment().format('YYYYMMDDhhmmss')
+  await fs.writeFile('hm_token.txt', content, 'utf8');
 
-  if (config.hosxp_patient_view) {
-
-    sql = `select an , hn , regdate from ${_view} order by an DESC limit 1`
-  }
-
-
-  try {
-    r = await knex.raw(sql)
-  } catch (error) {
-    res.json(error)
-    return false
-  }
-
-
-  if (config.db.client == 'pg') {
-    r[0] = r.rows;
-  }
-
-  data = {
-    'test': 'SUCCESS',
-    'hn': r[0][0].hn,
-    'an': r[0][0].an,
-    'regdate': r[0][0].regdate
-  }
-  console.log(data)
-  res.json(data)
-
-})
+  res.json({ 'done': content })
+});
 
 router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   hn = req.params.hn
@@ -75,57 +43,16 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
     return false
   }
 
-  if (config.his == 'ihealth') {
-
-    data = {
-      'hn': hn,
-      'cid': hn,
-      'fullname': hn,
-      'sex': 1,
-      'an': hn,
-      'birth': '1980-04-18'
-    }
-    res.json(data)
-    return false
-
-  } // ihealth
-
-
-  sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,sex,birthday as birth
-  ,(select an from an_stat where hn = '${hn}' order by an DESC limit 1) an
-  from patient where hn = '${hn}' limit 1`
-  if (config.hosxp_patient_view) {
-    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,if(sex_name='ชาย','1','2') as sex,birthday as birth,an
-          from ${_view} where hn = '${hn}' order by an DESC limit 1`
-  }
-
-
-
-  try {
-    r = await knex.raw(sql)
-  } catch (error) {
-    res.json(error)
-    return false
-  }
-
-  if (config.db.client == 'pg') {
-    r[0] = r.rows;
-  }
-
-  if (!r[0][0]) {
-    res.json(data_none)
-    return false
-  }
-  console.log(r[0][0])
   data = {
-    'hn': r[0][0].hn,
-    'cid': r[0][0].cid,
-    'fullname': r[0][0].fullname,
-    'sex': r[0][0].sex,
-    'an': r[0][0].an,
-    'birth': r[0][0].birth
+    'hn': hn,
+    'cid': hn,
+    'fullname': hn,
+    'sex': 1,
+    'an': hn,
+    'birth': '1980-04-18'
   }
   res.json(data)
+
 });
 
 
@@ -146,7 +73,7 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
     return false
   }
 
-  if (config.his == 'ihealth') {
+  if (config.his == 'hm') {
 
     data = {
       'hn': an,
@@ -161,45 +88,6 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
 
   } // ihealth
 
-
-
-
-  sql = `SELECT t.hn,p.cid,concat(p.pname,p.fname,' ',p.lname) fullname,p.sex,p.birthday as birth,t.an 
-  from an_stat t INNER JOIN patient p ON t.hn = p.hn
-  WHERE t.an = '${an}'`
-
-  if (config.hosxp_patient_view) {
-    sql = `select hn,cid,concat(pname,fname,' ',lname) fullname,if(sex_name='ชาย','1','2') as sex,birthday as birth,an
-          from ${_view} where an = '${an}'`
-  }
-
-
-
-  try {
-    r = await knex.raw(sql)
-  } catch (error) {
-    res.json(error)
-    return false
-  }
-
-  if (config.db.client == 'pg') {
-    r[0] = r.rows;
-  }
-
-  if (!r[0][0]) {
-    res.json(data_none)
-    return false
-  }
-  console.log(r[0][0])
-  data = {
-    'hn': r[0][0].hn,
-    'cid': r[0][0].cid,
-    'fullname': r[0][0].fullname,
-    'sex': r[0][0].sex,
-    'an': r[0][0].an,
-    'birth': r[0][0].birth
-  }
-  res.json(data)
 });
 
 

@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var config = require('./config.json')
 
 
 
@@ -31,8 +32,11 @@ app.use('/service', require('./routes/service'))
 app.use('/terminal', require('./routes/terminal'))
 
 app.use('/ovstkey', require('./routes/ovstkey'))
-
-app.use('/ipd', require('./routes/ipd'))
+if (config.his == 'hm') {
+  app.use('/ipd', require('./routes/ipd_hm'))
+} else {
+  app.use('/ipd', require('./routes/ipd'))
+}
 
 app.use('/test', require('./routes/test'))
 
