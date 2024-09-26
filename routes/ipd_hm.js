@@ -138,9 +138,14 @@ router.post('/post_data', async function (req, res, next) {
     res.json({ 'done': 'test', 'token': _token })
     return;
   }
-  
 
-
+  header_config = {
+    headers: {
+      'Authorization': `Bearer ${_token}`
+    }
+  }
+  let r = await axios.post('/api/saveIpdTemp', payload, header_config)
+  res.json(r.data)
 
 
 }); // post_data
