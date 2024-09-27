@@ -5,23 +5,17 @@ var moment = require('moment')
 const axios = require('axios');
 const fs = require('fs').promises;
 
-axios.defaults.baseURL = 'http://localhost:3000';
-
 
 router.get('/test', async function (req, res, next) {
 
-  const content = moment().format('YYYYMMDDhhmmss')
-  await fs.writeFile('hm_token.txt', content, 'utf8');
-  let data = await fs.readFile('hm_token.txt', 'utf8')
-
-  n = await axios.post('/test/post', { 'data': data })
-  res.json({ 'done': n.data })
+  let data = await fs.readFile('hm_token.txt', 'utf8');
+  res.json({ 'done': data })
 
 });
 
 router.get('/gen_hm_token', async function (req, res, next) {
-  url_login = "/api/userLogin"
-  url_checkAuthen = "/api/checkAuthen"
+  url_login = "http://188.8.8.2:11600/api/api/userLogin"
+  url_checkAuthen = "http://188.8.8.2:11600/api/api/checkAuthen"
 
   r = await axios.post(url_login, {
     "username": "systemGetApi",
@@ -43,10 +37,10 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
   if (config.mode_test) {
     data = {
       'hn': hn,
-      'cid': '112233445566',
-      'fullname': 'Mr.TEST TEST',
+      'cid': '1111111111111',
+      'fullname': 'Mr.TEST TEST HN',
       'sex': 1,
-      'an': '000000000000',
+      'an': '',
       'birth': '1980-04-18'
     }
     res.json(data)
@@ -55,7 +49,7 @@ router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
 
   data = {
     'hn': hn,
-    'cid': hn,
+    'cid': '',
     'fullname': hn,
     'sex': 1,
     'an': '',
@@ -72,9 +66,9 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
 
   if (config.mode_test) {
     data = {
-      'hn': '111111111',
+      'hn': '',
       'cid': '1111111111111',
-      'fullname': 'Mr.TEST TEST',
+      'fullname': 'Mr.TEST TEST AN',
       'sex': 1,
       'an': an,
       'birth': '1980-04-18'
@@ -85,7 +79,7 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
 
   data = {
     'hn': '',
-    'cid': an,
+    'cid': '',
     'fullname': an,
     'sex': 1,
     'an': an,
@@ -103,12 +97,14 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
 router.post('/post_data', async function (req, res, next) {
   data = req.body
   console.log(data)
-  var _now = moment().format('YYYY-MM-DD HHmmss')
+  const now = moment();
+
+  const _now = now.format('YYYY-MM-DD HH:mm:ss');
 
   let _token = await fs.readFile('hm_token.txt', 'utf8')
 
   payload = {
-    "client": axios.defaults.baseURL,
+    "client": "http://188.8.8.2:11600",
     "hn": data.hn,
     "visitId": "",
     "an": data.an,
@@ -152,7 +148,8 @@ router.post('/post_data', async function (req, res, next) {
       'Authorization': `Bearer ${_token}`
     }
   }
-  let r = await axios.post('/api/saveIpdTemp', payload, header_config)
+  let r = await axios.post('http://188.8.8.2:11600/api/api/saveIpdTemp', payload, header_config)
+  console.log(r.data)
   res.json(r.data)
 
 
