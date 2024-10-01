@@ -5,6 +5,7 @@ var moment = require('moment')
 const axios = require('axios');
 const fs = require('fs').promises;
 
+const host_api = "http://188.8.8.2:11600"
 
 router.get('/test', async function (req, res, next) {
 
@@ -14,8 +15,8 @@ router.get('/test', async function (req, res, next) {
 });
 
 router.get('/gen_hm_token', async function (req, res, next) {
-  url_login = "http://188.8.8.2:11600/api/api/userLogin"
-  url_checkAuthen = "http://188.8.8.2:11600/api/api/checkAuthen"
+  url_login = `${host_api}/api/api/userLogin`
+  url_checkAuthen = `${host_api}/api/api/checkAuthen`
 
   r = await axios.post(url_login, {
     "username": "systemGetApi",
@@ -28,7 +29,7 @@ router.get('/gen_hm_token', async function (req, res, next) {
 
   await fs.writeFile('hm_token.txt', content, 'utf8');
 
-  res.json({ 'done': content })
+  res.json({ 'gen token hm': content })
 });
 
 router.get('/get_patient_by_hn/:hn', async function (req, res, next) {
@@ -104,7 +105,7 @@ router.post('/post_data', async function (req, res, next) {
   let _token = await fs.readFile('hm_token.txt', 'utf8')
 
   payload = {
-    "client": "http://188.8.8.2:11600",
+    "client": `${host_api}`,
     "hn": data.hn,
     "visitId": "",
     "an": data.an,
