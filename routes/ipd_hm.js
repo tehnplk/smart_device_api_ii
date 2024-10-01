@@ -149,7 +149,7 @@ router.post('/post_data', async function (req, res, next) {
       'Authorization': `Bearer ${_token}`
     }
   }
-  let r = await axios.post('http://188.8.8.2:11600/api/api/saveIpdTemp', payload, header_config)
+  let r = await axios.post(`${host_api}/api/api/saveIpdTemp`, payload, header_config)
   console.log(r.data)
   res.json(r.data)
 
