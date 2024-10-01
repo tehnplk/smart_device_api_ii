@@ -24,4 +24,9 @@ router.post('/post',function (req,res){
     res.json(req.body)
 })
 
+router.get('/get',function (req,res){
+    console.log({'call':'1'})
+    res.json({'done':1})
+})
+
 module.exports = router;

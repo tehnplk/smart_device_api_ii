@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('./config.json')
+const axios = require('axios');
 
 
 
@@ -55,5 +56,15 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+setInterval(() => {
+  axios.get('http://localhost:3000/test/get')
+      .then(response => {
+          console.log('Route called:', response.data);
+      })
+      .catch(error => {
+          console.error('Error calling route:', error);
+      });
+}, 25*60*1000);
 
 module.exports = app;
