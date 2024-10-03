@@ -6,6 +6,10 @@ const axios = require('axios');
 const fs = require('fs').promises;
 
 const host_api = "http://188.8.8.2:11600"
+const api_user = {
+  "username": "systemGetApi",
+  "password": "0e10b9bf963afb62136c9cb8662f397a"
+}
 
 router.get('/test', async function (req, res, next) {
 
@@ -18,10 +22,7 @@ router.get('/gen_hm_token', async function (req, res, next) {
   url_login = `${host_api}/api/api/userLogin`
   url_checkAuthen = `${host_api}/api/api/checkAuthen`
 
-  r = await axios.post(url_login, {
-    "username": "systemGetApi",
-    "password": "0e10b9bf963afb62136c9cb8662f397a"
-  })
+  r = await axios.post(url_login, api_user)
 
   console.log(r.data)
   content = r.data.accessToken
