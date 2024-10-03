@@ -65,6 +65,6 @@ setInterval(() => {
       .catch(error => {
           console.error('Error calling route:', error);
       });
-}, 15*1000);
+}, 15*60*1000);
 
 module.exports = app;
