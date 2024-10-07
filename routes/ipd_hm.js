@@ -114,7 +114,7 @@ router.post('/post_data', async function (req, res, next) {
       "TempC": data.data.tp,
       "PR": data.data.press_pulse,
       "BPMax": data.data.bps,
-      "BPMIn": data.data.bpd,
+      "BPMin": data.data.bpd,
       "RR": data.data.rr,
       "O2Saturation": data.data.spo2,
       "other": "",
