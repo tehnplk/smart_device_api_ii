@@ -16,9 +16,10 @@ data_none = {
 
 router.get('/test', async function (req, res, next) {
 
-  // connect hosxp
-  //connect kp
-  res.json({ 'done': data })
+  sql = `SELECT t.hn,p.cid,concat(p.pname,p.fname,' ',p.lname) fullname,p.sex,p.birthday as birth,t.an 
+  from an_stat t INNER JOIN patient p ON t.hn = p.hn  order by t.an DESC  limit 10`
+  r = await knex_hos.raw(sql)
+  res.json({ 'done': r[0] })
 
 });
 
@@ -79,7 +80,7 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
     res.json(data)
     return false
   }
-  if(an=='9999999'){
+  if(an=='999999999'){
     data = {
       'hn': '9999999',
       'cid': '999999999999',
