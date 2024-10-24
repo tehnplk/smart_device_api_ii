@@ -6,11 +6,11 @@ var config = require('./config.json')
 Connection_string = {
     client: "mysql",
     connection: {
-        host: config.db.host,
-        port: config.db.port,
-        user: config.db.user,
-        password: config.db.password,
-        database: config.db.database,
+        host: config.db_kp.host,
+        port: config.db_kp.port,
+        user: config.db_kp.user,
+        password: config.db_kp.password,
+        database: config.db_kp.database,
         timezone: 'utc',
         requestTimeout: 1000,
         multipleStatements: true
@@ -23,19 +23,6 @@ Connection_string = {
         },
         min: 0,
         max: 7
-    }
-}
-if (config.db.client == 'pg') {
-    Connection_string = {
-        client: "pg",
-        connection: {
-            host: config.db.host,
-            port: config.db.port,
-            user: config.db.user,
-            password: config.db.password,
-            database: config.db.database,
-            requestTimeout: 30000,
-        },
     }
 }
 

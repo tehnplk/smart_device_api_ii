@@ -1,13 +1,13 @@
 {
     "mode_test": false,
     "hoscode": "00000",
-    "his_support": "hosxp|jhcis|him|ihealth|hm",
-    "his": "hm",
+    "his_support": "hosxp|jhcis|him|ihealth|hm|kp",
+    "his": "kp",
     "not_post_if_null_pt": true,
     "hosxp_patient_view": false,
     "hosxp_patient_view_name": "patient_visit_infoIPD",
-    "ihealth_api":"https://nnn:8080/api/smart/send",
-    "ihealth_token":"2452cac1d643f636358527354628cf2ca187121f36b43ff62b0ffda149f3938328d5ad5ae7d155e40df9ff4c5f9e224a51376e377a6d698c97aab84697",
+    "ihealth_api": "https://nnn:8080/api/smart/send",
+    "ihealth_token": "2452cac1d643f636358527354628cf2ca187121f36b43ff62b0ffda149f3938328d5ad5ae7d155e40df9ff4c5f9e224a51376e377a6d698c97aab84697",
     "db": {
         "client_support": "mysql | pg",
         "client": "mysql",
@@ -15,7 +15,15 @@
         "port": 3333,
         "user": "root",
         "password": "123456",
-        "database": "jhcisdb"
+        "database": "hos"
+    },
+    "db_kp": {
+        "client": "mysql",
+        "host": "localhost",
+        "port": 3333,
+        "user": "root",
+        "password": "123456",
+        "database": "kphis"
     },
     "api": {
         "port": 3000

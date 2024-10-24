@@ -35,6 +35,8 @@ app.use('/terminal', require('./routes/terminal'))
 app.use('/ovstkey', require('./routes/ovstkey'))
 if (config.his == 'hm') {
   app.use('/ipd', require('./routes/ipd_hm'))
+}else if(config.his == 'kp'){
+  app.use('/ipd', require('./routes/ipd_kp'))
 } else {
   app.use('/ipd', require('./routes/ipd'))
 }
