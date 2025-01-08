@@ -24,7 +24,7 @@ router.get('/test', async function (req, res, next) {
     return false
   }
 
-  sql = "select vn , hn , vstdate,vsttime from ovst order by vn DESC limit 1"
+  sql = "select vn , hn , vstdate,vsttime from ovst where vstdate = CURDATE() order by vn DESC limit 1"
 
   if (config.hosxp_patient_view) {
     sql = "select * from patientinfo order by vn DESC limit 1"
