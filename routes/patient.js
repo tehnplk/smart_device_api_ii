@@ -6,7 +6,7 @@ var config = require('../config.json')
 data_none = {
   'hn': NaN,
   'cid': NaN,
-  'fullname': NaN,
+  'fullname': 'ไม่พบข้อมูลบุคคล',
   'sex': NaN,
   'vn': NaN,
   'birth': '1800-01-01',
@@ -292,6 +292,7 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
 
   try {
     r = await knex.raw(sql)
+    console.log(r[0])
   } catch (error) {
     res.json(error)
     return false
@@ -301,11 +302,20 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
     r[0] = r.rows;
   }
 
+ 
+
   if (!r[0][0]) {
-    res.json(data_none)
+    res.json({
+      'hn': '',
+      'cid': "",
+      'fullname': "ไม่พบข้อมูลบุคคล",
+      'sex': 1,
+      'vn': vn,
+      'birth': '1980-04-18'
+    })
     return false
   }
-  console.log(r[0][0])
+  
   data = {
     'hn': r[0][0].hn,
     'cid': r[0][0].cid,
@@ -315,7 +325,7 @@ router.get('/get_patient_by_vn/:vn', async function (req, res, next) {
     'birth': r[0][0].birth
   }
   res.json(data)
-});
+}); // end vn
 
 router.get('/get_today_visit_by_cid/:cid', async function (req, res, next) {
   cid = req.params.cid
