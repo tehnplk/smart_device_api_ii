@@ -80,7 +80,7 @@ router.get('/get_patient_by_an/:an', async function (req, res, next) {
     res.json(data)
     return false
   }
-  if(an=='999999999'){
+  if (an == '999999999') {
     data = {
       'hn': '9999999',
       'cid': '999999999999',
@@ -129,31 +129,59 @@ router.post('/post_data', async function (req, res, next) {
   console.log(data)
   const now = moment();
   //const _now = now.format('YYYY-MM-DD HH:mm:ss');
-  const _now = knex_kp.raw('NOW()') 
+  const _now = knex_kp.raw('NOW()')
   _user_kp = "vs_machine"
-  raw = {
+
+  let raw = {
     'vs_datetime': _now,
     'hn': data.hn,
     'an': data.an,
     'bt': data.data.tp,
     'pr': data.data.press_pulse,
-    'rr': data.data.rr,   
+    'rr': data.data.rr,
     'sbp': data.data.bps,
-    'dbp': data.data.bpd,    
+    'dbp': data.data.bpd,
     'sat': data.data.spo2,
     'bw': data.data.weight,
     'height': data.data.height,
     'respirator': 'N',
     'inotrope': 'N',
-    'catheter':'N',
-    'suction':'N',
-    'nb':'N',
+    'catheter': 'N',
+    'suction': 'N',
+    'nb': 'N',
     'create_user': _user_kp,
     'update_user': _user_kp,
     'create_datetime': _now,
     'update_datetime': _now,
     'version': 1
   }
+
+  if (data.data.weight == 0 || data.data.height == 0) {
+    raw = {
+      'vs_datetime': _now,
+      'hn': data.hn,
+      'an': data.an,
+      'bt': data.data.tp,
+      'pr': data.data.press_pulse,
+      'rr': data.data.rr,
+      'sbp': data.data.bps,
+      'dbp': data.data.bpd,
+      'sat': data.data.spo2,
+      //'bw': data.data.weight,
+      //'height': data.data.height,
+      'respirator': 'N',
+      'inotrope': 'N',
+      'catheter': 'N',
+      'suction': 'N',
+      'nb': 'N',
+      'create_user': _user_kp,
+      'update_user': _user_kp,
+      'create_datetime': _now,
+      'update_datetime': _now,
+      'version': 1
+    }
+  }
+
   r = await knex_kp('ipd_vs_vital_sign').insert(raw)
   res.json(r)
 
