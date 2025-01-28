@@ -168,7 +168,7 @@ router.post('/post_data', async function (req, res, next) {
       'dbp': data.data.bpd,
       'sat': data.data.spo2,
       //'bw': data.data.weight,
-      'height': data.data.height,
+      //'height': data.data.height,
       'respirator': 'N',
       'inotrope': 'N',
       'catheter': 'N',
