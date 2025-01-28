@@ -156,7 +156,7 @@ router.post('/post_data', async function (req, res, next) {
     'version': 1
   }
 
-  if (data.data.weight == 0 || data.data.height == 0) {
+  if (!data.data.weight || data.data.weight == 0 || !data.data.height || data.data.height == 0) {
     raw = {
       'vs_datetime': _now,
       'hn': data.hn,
@@ -168,7 +168,7 @@ router.post('/post_data', async function (req, res, next) {
       'dbp': data.data.bpd,
       'sat': data.data.spo2,
       //'bw': data.data.weight,
-      //'height': data.data.height,
+      'height': data.data.height,
       'respirator': 'N',
       'inotrope': 'N',
       'catheter': 'N',
