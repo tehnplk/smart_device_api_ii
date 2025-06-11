@@ -60,13 +60,13 @@ app.use(function (err, req, res, next) {
 });
 
 setInterval(() => {
-  axios.get('http://localhost:3000/ipd/test')
+  axios.get('http://localhost:3000/ipd/gen_hm_token')
       .then(response => {
           console.log('interval Route called:', response.data);
       })
       .catch(error => {
           console.error('Error calling route:', error);
       });
-}, 15*60*1000);
+}, 10*60*1000);
 
 module.exports = app;

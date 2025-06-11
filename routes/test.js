@@ -29,4 +29,22 @@ router.get('/get',function (req,res){
     res.json({'done':1})
 })
 
+router.get('/pg',function (req,res){
+ let sql_ = `insert into opdscreen_bp (opdscreen_bp_id,vn,bps,bpd,pulse,depcode,staff,screen_date,screen_time,temperature)
+    values (get_serialnumber('opdscreen_bp_id'),'${vn}',${bps},${bpd},${pulse},'${depcode}','${staff}',CURRENT_DATE,CURRENT_TIME(0),${temperature})
+    ON CONFLICT (opdscreen_bp_id) DO UPDATE
+    SET vn=excluded.vn,bps=excluded.bps,bpd=excluded.bpd,pulse=excluded.pulse,
+  depcode=excluded.depcode,staff=excluded.staff,screen_date=excluded.screen_date,screen_time=excluded.screen_time,temperature=excluded.temperature`;
+
+
+ let sql = `insert into opdscreen_bp (opdscreen_bp_id,vn,bps,bpd,pulse,depcode,staff,screen_date,screen_time,temperature)
+    values (get_serialnumber('opdscreen_bp_id'),'0',120,80,66,'001','admin',CURRENT_DATE,CURRENT_TIME(0),37.0)
+    ON CONFLICT (opdscreen_bp_id) DO UPDATE
+    SET vn=excluded.vn,bps=excluded.bps,bpd=excluded.bpd,pulse=excluded.pulse,
+  depcode=excluded.depcode,staff=excluded.staff,screen_date=excluded.screen_date,screen_time=excluded.screen_time,temperature=excluded.temperature`;
+
+  let response = knex.raw(sql)
+}
+
+)
 module.exports = router;
